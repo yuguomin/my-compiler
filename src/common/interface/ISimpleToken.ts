@@ -1,6 +1,8 @@
-import { ITokenType } from "./ISimpleLexer";
+import { TokenType } from './ISimpleLexer';
 
 export interface ISimpleToken {
-  getType(): ITokenType | null;
+  type: TokenType | null;
+  text: string;
+  getType(): TokenType | null;
   getText(): string;
 }

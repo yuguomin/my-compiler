@@ -1,5 +1,5 @@
-import { ITokenItem } from "./ISimpleLexer";
+import { ISimpleToken } from './ISimpleToken';
 
 export interface ITokenReader {
-  read(): ITokenItem | null;
+  read(): ISimpleToken | null;
 }

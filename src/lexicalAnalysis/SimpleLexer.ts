@@ -1,35 +1,54 @@
-import { ITokenItem, DfaState } from "src/common/interface/ISimpleLexer";
-import { TokenReader } from "./TokenReader";
-import { ITokenReader } from "src/common/interface/ITokenReader";
-import { SimpleToken } from "./SimpleToken";
+import { DfaState, TokenType } from '../common/interface/ISimpleLexer';
+import { TokenReader } from './TokenReader';
+import { ITokenReader } from '../common/interface/ITokenReader';
+import { SimpleToken } from './SimpleToken';
+import { isAlpha, isDight, isGE } from '../common/utils/stringVerify';
+import { ISimpleToken } from '../common/interface/ISimpleToken';
 
 export class SimpleLexer {
-  constructor(code: string) {
-    this.tokenize(code);
-  }
+  private tokenList: ISimpleToken[] = [];
+  private token: ISimpleToken = new SimpleToken();
+  private tokenText: string = '';
 
-  private tokenList: ITokenItem[] = [];
-  private token: ITokenItem;
-  private tokenText: string;
-  
   /**
    * @description
    * Finite perpetual motion machine, parse to get every token to the list.
    * Rules: judge machine state, go init or just append to text.
    */
   public tokenize: (code: string) => ITokenReader = (code) => {
-    let readIndex: number = 0;
+    let readCharIndex: number = 0;
     let char: string = '';
     let state = DfaState.Initial;
-    while ((char = code[readIndex++]) !== undefined) {
-      try {
+    try {
+      while ((char = code[readCharIndex++]) !== undefined) {
         switch (state) {
           case DfaState.Initial:
+            state = this.initToken(char);
+            break;
+          case DfaState.Id:
+            if (isAlpha(char) || isDight(char)) {
+              this.append2TokenText(char);
+            } else {
+              state = this.initToken(char);
+            }
+            break;
+          case DfaState.NumberLiteral:
+            if (isDight(char)) {
+              this.append2TokenText(char);
+            } else {
+              state = this.initToken(char);
+            }
+            break;
+          case DfaState.GE:
+            state = this.initToken(char);
             break;
         }
-      } catch (err) {
-        console.log('err:', err);
       }
+      if (this.tokenText) {
+        this.initToken(char);
+      }
+    } catch (err) {
+      console.log('err:', err);
     }
     return new TokenReader(this.tokenList);
   }
@@ -39,11 +58,50 @@ export class SimpleLexer {
    * init token and judge current char state to parse machine
    * Rules: if has token, need append to list first, and init token and text, then jurdge char state.
    */
-  private initToken: (char: string) => DfaState = () => {
+  private initToken: (char: string) => DfaState = (char) => {
+    // init token
     if (this.tokenText.length) {
       this.token.text = this.tokenText;
+      this.tokenList.push(this.token);
       this.token = new SimpleToken();
+      this.tokenText = '';
     }
-    return DfaState.Initial;
+    return this.getInitCharState(char);
+  }
+
+  private getInitCharState: (char: string) => DfaState = (char) => {
+    let newState = DfaState.Initial;
+    if (isAlpha(char)) {
+      newState = DfaState.Id;
+      this.changeTokenType(TokenType.Identifier);
+      this.append2TokenText(char);
+    } else if (isDight(char)) {
+      newState = DfaState.NumberLiteral;
+      this.changeTokenType(TokenType.NumberLiteral);
+      this.append2TokenText(char);
+    } else if (isGE(char)) {
+      newState = DfaState.GE;
+      this.changeTokenType(TokenType.GE);
+      this.append2TokenText(char);
+    }
+    return newState;
+  }
+
+  private append2TokenText: (char: string) => void = (char) => {
+    this.tokenText = this.tokenText + char;
+  }
+
+  private changeTokenType: (state: TokenType) => void = (state) => {
+    this.token.type = state;
+  }
+
+
+  public dumps = (tokenReader: ITokenReader) => {
+    const pos = 0;
+    let token: ISimpleToken | null = null;
+    console.log('text\ttype')
+    while (token = tokenReader.read()) {
+      console.log(token.getText()+"\t"+token.getType());
+    }
   }
 }

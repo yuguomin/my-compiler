@@ -1,16 +1,13 @@
-export interface ITokenItem {
-  type: ITokenType | null;
-  text: string;
-}
-
-export enum ITokenType {
-  Identifier,
-  NumberLiteral,
-  StringLiteral
+export enum TokenType {
+  Identifier = 'Identifier',
+  NumberLiteral = 'NumberLiteral',
+  StringLiteral = 'StringLiteral',
+  GE = 'GE'
 }
 
 export enum DfaState {
   Initial,
   Id,
-  NumberLiteral
+  NumberLiteral,
+  GE
 }
