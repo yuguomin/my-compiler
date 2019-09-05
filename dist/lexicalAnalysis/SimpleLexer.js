@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ISimpleLexer_1 = require("../common/interface/ISimpleLexer");
+const ISimpleLexer_1 = require("./interface/ISimpleLexer");
 const TokenReader_1 = require("./TokenReader");
 const SimpleToken_1 = require("./SimpleToken");
 const stringVerify_1 = require("../common/utils/stringVerify");
@@ -45,6 +45,8 @@ class SimpleLexer {
                             break;
                         case ISimpleLexer_1.DfaState.GT:
                             if (stringVerify_1.isGE(char)) {
+                                this.token.type = ISimpleLexer_1.TokenType.GE;
+                                state = ISimpleLexer_1.DfaState.GE;
                                 this.append2TokenText(char);
                             }
                             else {

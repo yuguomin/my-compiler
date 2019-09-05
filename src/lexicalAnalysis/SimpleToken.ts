@@ -1,5 +1,5 @@
-import { ISimpleToken } from 'src/common/interface/ISimpleToken';
-import { TokenType } from 'src/common/interface/ISimpleLexer';
+import { ISimpleToken } from './interface/ISimpleToken';
+import { TokenType } from './interface/ISimpleLexer';
 
 export class SimpleToken implements ISimpleToken {
   //Token类型

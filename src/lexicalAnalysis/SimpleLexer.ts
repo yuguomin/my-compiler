@@ -1,9 +1,9 @@
-import { DfaState, TokenType, ISimpleLexer } from '../common/interface/ISimpleLexer';
+import { DfaState, TokenType, ISimpleLexer } from './interface/ISimpleLexer';
 import { TokenReader } from './TokenReader';
-import { ITokenReader } from '../common/interface/ITokenReader';
+import { ITokenReader } from './interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
 import { isAlpha, isDight, isGE, isGT } from '../common/utils/stringVerify';
-import { ISimpleToken } from '../common/interface/ISimpleToken';
+import { ISimpleToken } from './interface/ISimpleToken';
 
 export class SimpleLexer implements ISimpleLexer {
   constructor(code: string) {
@@ -49,6 +49,8 @@ export class SimpleLexer implements ISimpleLexer {
             break;
           case DfaState.GT:
             if (isGE(char)) {
+              this.token.type = TokenType.GE;
+              state = DfaState.GE;
               this.append2TokenText(char);
             } else {
               state = this.initToken(char);

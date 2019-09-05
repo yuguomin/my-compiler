@@ -1,5 +1,5 @@
-import { ITokenReader } from 'src/common/interface/ITokenReader';
-import { ISimpleToken } from 'src/common/interface/ISimpleToken';
+import { ITokenReader } from './interface/ITokenReader';
+import { ISimpleToken } from './interface/ISimpleToken';
 
 export class TokenReader implements ITokenReader {
   constructor(tokenList: ISimpleToken[]) {
