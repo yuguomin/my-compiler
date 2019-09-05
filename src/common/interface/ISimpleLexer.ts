@@ -1,3 +1,5 @@
+import { ISimpleToken } from "./ISimpleToken";
+
 export enum TokenType {
   Identifier = 'Identifier',
   NumberLiteral = 'NumberLiteral',
@@ -10,4 +12,9 @@ export enum DfaState {
   Id,
   NumberLiteral,
   GE
+}
+
+export interface ISimpleLexer {
+  dump(): void;
+  getTokens(): ISimpleToken[];
 }

@@ -1,21 +1,26 @@
-import { DfaState, TokenType } from '../common/interface/ISimpleLexer';
+import { DfaState, TokenType, ISimpleLexer } from '../common/interface/ISimpleLexer';
 import { TokenReader } from './TokenReader';
 import { ITokenReader } from '../common/interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
 import { isAlpha, isDight, isGE } from '../common/utils/stringVerify';
 import { ISimpleToken } from '../common/interface/ISimpleToken';
 
-export class SimpleLexer {
+export class SimpleLexer implements ISimpleLexer {
+  constructor(code: string) {
+    this.tokenize(code);
+  }
+
   private tokenList: ISimpleToken[] = [];
   private token: ISimpleToken = new SimpleToken();
   private tokenText: string = '';
+  private tokenReader: ITokenReader;
 
   /**
    * @description
    * Finite perpetual motion machine, parse to get every token to the list.
    * Rules: judge machine state, go init or just append to text.
    */
-  public tokenize: (code: string) => ITokenReader = (code) => {
+  private tokenize: (code: string) => ITokenReader = (code) => {
     let readCharIndex: number = 0;
     let char: string = '';
     let state = DfaState.Initial;
@@ -50,7 +55,8 @@ export class SimpleLexer {
     } catch (err) {
       console.log('err:', err);
     }
-    return new TokenReader(this.tokenList);
+    return this.tokenReader = new TokenReader(this.tokenList);
+    // return this.tokenList;
   }
 
   /**
@@ -96,12 +102,15 @@ export class SimpleLexer {
   }
 
 
-  public dumps = (tokenReader: ITokenReader) => {
-    const pos = 0;
+  public dump = () => {
     let token: ISimpleToken | null = null;
     console.log('text\ttype')
-    while (token = tokenReader.read()) {
+    while (token = this.tokenReader.read()) {
       console.log(token.getText()+"\t"+token.getType());
     }
+  }
+
+  public getTokens = () => {
+    return this.tokenList;
   }
 }

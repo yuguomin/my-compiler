@@ -5,7 +5,7 @@ const TokenReader_1 = require("./TokenReader");
 const SimpleToken_1 = require("./SimpleToken");
 const stringVerify_1 = require("../common/utils/stringVerify");
 class SimpleLexer {
-    constructor() {
+    constructor(code) {
         this.tokenList = [];
         this.token = new SimpleToken_1.SimpleToken();
         this.tokenText = '';
@@ -52,7 +52,8 @@ class SimpleLexer {
             catch (err) {
                 console.log('err:', err);
             }
-            return new TokenReader_1.TokenReader(this.tokenList);
+            return this.tokenReader = new TokenReader_1.TokenReader(this.tokenList);
+            // return this.tokenList;
         };
         /**
          * @description
@@ -94,14 +95,17 @@ class SimpleLexer {
         this.changeTokenType = (state) => {
             this.token.type = state;
         };
-        this.dumps = (tokenReader) => {
-            const pos = 0;
+        this.dump = () => {
             let token = null;
             console.log('text\ttype');
-            while (token = tokenReader.read()) {
+            while (token = this.tokenReader.read()) {
                 console.log(token.getText() + "\t" + token.getType());
             }
         };
+        this.getTokens = () => {
+            return this.tokenList;
+        };
+        this.tokenize(code);
     }
 }
 exports.SimpleLexer = SimpleLexer;
