@@ -6,6 +6,7 @@ var TokenType;
     TokenType["NumberLiteral"] = "NumberLiteral";
     TokenType["StringLiteral"] = "StringLiteral";
     TokenType["GE"] = "GE";
+    TokenType["GT"] = "GT";
 })(TokenType = exports.TokenType || (exports.TokenType = {}));
 var DfaState;
 (function (DfaState) {
@@ -13,4 +14,5 @@ var DfaState;
     DfaState[DfaState["Id"] = 1] = "Id";
     DfaState[DfaState["NumberLiteral"] = 2] = "NumberLiteral";
     DfaState[DfaState["GE"] = 3] = "GE";
+    DfaState[DfaState["GT"] = 4] = "GT";
 })(DfaState = exports.DfaState || (exports.DfaState = {}));

@@ -4,14 +4,16 @@ export enum TokenType {
   Identifier = 'Identifier',
   NumberLiteral = 'NumberLiteral',
   StringLiteral = 'StringLiteral',
-  GE = 'GE'
+  GE = 'GE',
+  GT = 'GT'
 }
 
 export enum DfaState {
   Initial,
   Id,
   NumberLiteral,
-  GE
+  GE,
+  GT
 }
 
 export interface ISimpleLexer {

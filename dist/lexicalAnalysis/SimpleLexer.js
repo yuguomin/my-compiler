@@ -43,6 +43,14 @@ class SimpleLexer {
                         case ISimpleLexer_1.DfaState.GE:
                             state = this.initToken(char);
                             break;
+                        case ISimpleLexer_1.DfaState.GT:
+                            if (stringVerify_1.isGE(char)) {
+                                this.append2TokenText(char);
+                            }
+                            else {
+                                state = this.initToken(char);
+                            }
+                            break;
                     }
                 }
                 if (this.tokenText) {
@@ -85,6 +93,11 @@ class SimpleLexer {
             else if (stringVerify_1.isGE(char)) {
                 newState = ISimpleLexer_1.DfaState.GE;
                 this.changeTokenType(ISimpleLexer_1.TokenType.GE);
+                this.append2TokenText(char);
+            }
+            else if (stringVerify_1.isGT(char)) {
+                newState = ISimpleLexer_1.DfaState.GT;
+                this.changeTokenType(ISimpleLexer_1.TokenType.GT);
                 this.append2TokenText(char);
             }
             return newState;

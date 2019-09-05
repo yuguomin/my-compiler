@@ -9,3 +9,7 @@ export const isDight: (singleChar: string) => boolean = (singleChar) => {
 export const isGE: (singleChar: string) => boolean = (singleChar) => {
   return /^=$/.test(singleChar);
 }
+
+export const isGT: (singleChar: string) => boolean = (singleChar) => {
+  return /^>$/.test(singleChar);
+}

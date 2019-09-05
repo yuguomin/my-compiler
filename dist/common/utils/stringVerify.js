@@ -9,3 +9,6 @@ exports.isDight = (singleChar) => {
 exports.isGE = (singleChar) => {
     return /^=$/.test(singleChar);
 };
+exports.isGT = (singleChar) => {
+    return /^>$/.test(singleChar);
+};
