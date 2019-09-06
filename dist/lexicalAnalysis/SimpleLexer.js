@@ -4,6 +4,10 @@ const ISimpleLexer_1 = require("./interface/ISimpleLexer");
 const TokenReader_1 = require("./TokenReader");
 const SimpleToken_1 = require("./SimpleToken");
 const stringVerify_1 = require("../common/utils/stringVerify");
+/**
+ * @description
+ * for a piece of code create a lexer class, can do something about tokens.
+ */
 class SimpleLexer {
     constructor(code) {
         this.tokenList = [];
@@ -40,11 +44,12 @@ class SimpleLexer {
                                 state = this.initToken(char);
                             }
                             break;
+                        case ISimpleLexer_1.DfaState.Assignment:
                         case ISimpleLexer_1.DfaState.GE:
                             state = this.initToken(char);
                             break;
                         case ISimpleLexer_1.DfaState.GT:
-                            if (stringVerify_1.isGE(char)) {
+                            if (stringVerify_1.isAssignment(char)) {
                                 this.token.type = ISimpleLexer_1.TokenType.GE;
                                 state = ISimpleLexer_1.DfaState.GE;
                                 this.append2TokenText(char);
@@ -63,7 +68,6 @@ class SimpleLexer {
                 console.log('err:', err);
             }
             return this.tokenReader = new TokenReader_1.TokenReader(this.tokenList);
-            // return this.tokenList;
         };
         /**
          * @description
@@ -92,9 +96,9 @@ class SimpleLexer {
                 this.changeTokenType(ISimpleLexer_1.TokenType.NumberLiteral);
                 this.append2TokenText(char);
             }
-            else if (stringVerify_1.isGE(char)) {
-                newState = ISimpleLexer_1.DfaState.GE;
-                this.changeTokenType(ISimpleLexer_1.TokenType.GE);
+            else if (stringVerify_1.isAssignment(char)) {
+                newState = ISimpleLexer_1.DfaState.Assignment;
+                this.changeTokenType(ISimpleLexer_1.TokenType.Assignment);
                 this.append2TokenText(char);
             }
             else if (stringVerify_1.isGT(char)) {

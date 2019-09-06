@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class SimpleToken {
     constructor() {
-        //Token类型
         this.type = null;
         this.text = '';
         this.getType = () => {

@@ -2,9 +2,13 @@ import { DfaState, TokenType, ISimpleLexer } from './interface/ISimpleLexer';
 import { TokenReader } from './TokenReader';
 import { ITokenReader } from './interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
-import { isAlpha, isDight, isGE, isGT } from '../common/utils/stringVerify';
+import { isAlpha, isDight, isAssignment, isGT } from '../common/utils/stringVerify';
 import { ISimpleToken } from './interface/ISimpleToken';
 
+/** 
+ * @description
+ * for a piece of code create a lexer class, can do something about tokens.
+ */
 export class SimpleLexer implements ISimpleLexer {
   constructor(code: string) {
     this.tokenize(code);
@@ -44,11 +48,12 @@ export class SimpleLexer implements ISimpleLexer {
               state = this.initToken(char);
             }
             break;
+          case DfaState.Assignment:
           case DfaState.GE:
             state = this.initToken(char);
             break;
           case DfaState.GT:
-            if (isGE(char)) {
+            if (isAssignment(char)) {
               this.token.type = TokenType.GE;
               state = DfaState.GE;
               this.append2TokenText(char);
@@ -65,7 +70,6 @@ export class SimpleLexer implements ISimpleLexer {
       console.log('err:', err);
     }
     return this.tokenReader = new TokenReader(this.tokenList);
-    // return this.tokenList;
   }
 
   /**
@@ -94,9 +98,9 @@ export class SimpleLexer implements ISimpleLexer {
       newState = DfaState.NumberLiteral;
       this.changeTokenType(TokenType.NumberLiteral);
       this.append2TokenText(char);
-    } else if (isGE(char)) {
-      newState = DfaState.GE;
-      this.changeTokenType(TokenType.GE);
+    } else if (isAssignment(char)) {
+      newState = DfaState.Assignment;
+      this.changeTokenType(TokenType.Assignment);
       this.append2TokenText(char);
     } else if (isGT(char)) {
       newState = DfaState.GT;

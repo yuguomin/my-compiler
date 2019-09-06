@@ -6,7 +6,7 @@ exports.isAlpha = (singleChar) => {
 exports.isDight = (singleChar) => {
     return /[0-9]/.test(singleChar);
 };
-exports.isGE = (singleChar) => {
+exports.isAssignment = (singleChar) => {
     return /^=$/.test(singleChar);
 };
 exports.isGT = (singleChar) => {

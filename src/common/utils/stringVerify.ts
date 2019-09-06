@@ -6,7 +6,7 @@ export const isDight: (singleChar: string) => boolean = (singleChar) => {
   return /[0-9]/.test(singleChar);
 }
 
-export const isGE: (singleChar: string) => boolean = (singleChar) => {
+export const isAssignment: (singleChar: string) => boolean = (singleChar) => {
   return /^=$/.test(singleChar);
 }
 
