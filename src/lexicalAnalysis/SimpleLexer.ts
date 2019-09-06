@@ -2,8 +2,9 @@ import { DfaState, TokenType, ISimpleLexer } from './interface/ISimpleLexer';
 import { TokenReader } from './TokenReader';
 import { ITokenReader } from './interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
-import { isAlpha, isDight, isAssignment, isGT } from '../common/utils/stringVerify';
+import { isAlpha, isDight, isAssignment, isGT, isBlank } from '../common/utils/stringVerify';
 import { ISimpleToken } from './interface/ISimpleToken';
+import { INT_ID_TOKEN_BEGIN, INT_ID_TOKEN_SECOND, INT_ID_TOKEN_END } from './contants/lexicalAnalysis';
 
 /** 
  * @description
@@ -41,6 +42,35 @@ export class SimpleLexer implements ISimpleLexer {
               state = this.initToken(char);
             }
             break;
+          case DfaState.Id_Int1:
+            if (char === INT_ID_TOKEN_SECOND) {
+              state = DfaState.Id_Int2;
+              this.append2TokenText(char);
+            } else if (isAlpha(char) || isDight(char)) {
+              state = DfaState.Id;
+              this.append2TokenText(char);
+            } else {
+              state = this.initToken(char);
+            }
+            break;
+          case DfaState.Id_Int2:
+            if (char === INT_ID_TOKEN_END) {
+              state = DfaState.Id_Int3;
+              this.append2TokenText(char);
+            } else if (isAlpha(char) || isDight(char)) {
+              state = DfaState.Id;
+              this.append2TokenText(char);
+            } else {
+              state = this.initToken(char);
+            }
+            break;
+          case DfaState.Id_Int3:
+            if (isBlank(char)) {
+              this.changeTokenType(TokenType.Int);
+            } else {
+              state = DfaState.Id; 
+              this.append2TokenText(char);
+            }
           case DfaState.NumberLiteral:
             if (isDight(char)) {
               this.append2TokenText(char);
@@ -91,7 +121,7 @@ export class SimpleLexer implements ISimpleLexer {
   private getInitCharState: (char: string) => DfaState = (char) => {
     let newState = DfaState.Initial;
     if (isAlpha(char)) {
-      newState = DfaState.Id;
+      newState = char === INT_ID_TOKEN_BEGIN ? DfaState.Id_Int1 : DfaState.Id;
       this.changeTokenType(TokenType.Identifier);
       this.append2TokenText(char);
     } else if (isDight(char)) {

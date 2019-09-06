@@ -13,3 +13,7 @@ export const isAssignment: (singleChar: string) => boolean = (singleChar) => {
 export const isGT: (singleChar: string) => boolean = (singleChar) => {
   return /^>$/.test(singleChar);
 }
+
+export const isBlank: (singleChar: string) => boolean = (singleChar) => {
+  return /\s/.test(singleChar);
+}

@@ -12,3 +12,6 @@ exports.isAssignment = (singleChar) => {
 exports.isGT = (singleChar) => {
     return /^>$/.test(singleChar);
 };
+exports.isBlank = (singleChar) => {
+    return /\s/.test(singleChar);
+};

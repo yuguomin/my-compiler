@@ -1,7 +1,7 @@
 import { SimpleLexer } from "./lexicalAnalysis/SimpleLexer";
 
-const testLexer = new SimpleLexer('int asd1 >= 123');
-const data = new SimpleLexer('asdddd = 123');
+const assignmentToken = new SimpleLexer('int asd1 = 123');
+const compareToken = new SimpleLexer('asdddd >= 123');
 
-testLexer.dump();
-// data.getTokens();
+// assignmentToken.dump();
+compareToken.dump();

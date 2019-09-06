@@ -4,6 +4,7 @@ const ISimpleLexer_1 = require("./interface/ISimpleLexer");
 const TokenReader_1 = require("./TokenReader");
 const SimpleToken_1 = require("./SimpleToken");
 const stringVerify_1 = require("../common/utils/stringVerify");
+const lexicalAnalysis_1 = require("./contants/lexicalAnalysis");
 /**
  * @description
  * for a piece of code create a lexer class, can do something about tokens.
@@ -36,6 +37,40 @@ class SimpleLexer {
                                 state = this.initToken(char);
                             }
                             break;
+                        case ISimpleLexer_1.DfaState.Id_Int1:
+                            if (char === lexicalAnalysis_1.INT_ID_TOKEN_SECOND) {
+                                state = ISimpleLexer_1.DfaState.Id_Int2;
+                                this.append2TokenText(char);
+                            }
+                            else if (stringVerify_1.isAlpha(char) || stringVerify_1.isDight(char)) {
+                                state = ISimpleLexer_1.DfaState.Id;
+                                this.append2TokenText(char);
+                            }
+                            else {
+                                state = this.initToken(char);
+                            }
+                            break;
+                        case ISimpleLexer_1.DfaState.Id_Int2:
+                            if (char === lexicalAnalysis_1.INT_ID_TOKEN_END) {
+                                state = ISimpleLexer_1.DfaState.Id_Int3;
+                                this.append2TokenText(char);
+                            }
+                            else if (stringVerify_1.isAlpha(char) || stringVerify_1.isDight(char)) {
+                                state = ISimpleLexer_1.DfaState.Id;
+                                this.append2TokenText(char);
+                            }
+                            else {
+                                state = this.initToken(char);
+                            }
+                            break;
+                        case ISimpleLexer_1.DfaState.Id_Int3:
+                            if (stringVerify_1.isBlank(char)) {
+                                this.changeTokenType(ISimpleLexer_1.TokenType.Int);
+                            }
+                            else {
+                                state = ISimpleLexer_1.DfaState.Id;
+                                this.append2TokenText(char);
+                            }
                         case ISimpleLexer_1.DfaState.NumberLiteral:
                             if (stringVerify_1.isDight(char)) {
                                 this.append2TokenText(char);
@@ -87,7 +122,7 @@ class SimpleLexer {
         this.getInitCharState = (char) => {
             let newState = ISimpleLexer_1.DfaState.Initial;
             if (stringVerify_1.isAlpha(char)) {
-                newState = ISimpleLexer_1.DfaState.Id;
+                newState = char === lexicalAnalysis_1.INT_ID_TOKEN_BEGIN ? ISimpleLexer_1.DfaState.Id_Int1 : ISimpleLexer_1.DfaState.Id;
                 this.changeTokenType(ISimpleLexer_1.TokenType.Identifier);
                 this.append2TokenText(char);
             }
