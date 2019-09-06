@@ -2,9 +2,9 @@ import { DfaState, TokenType, ISimpleLexer } from './interface/ISimpleLexer';
 import { TokenReader } from './TokenReader';
 import { ITokenReader } from './interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
-import { isAlpha, isDight, isAssignment, isGT, isBlank } from '../common/utils/stringVerify';
+import { isAlpha, isDight, isBlank } from '../common/utils/stringVerify';
 import { ISimpleToken } from './interface/ISimpleToken';
-import { INT_ID_TOKEN_BEGIN, INT_ID_TOKEN_SECOND, INT_ID_TOKEN_END } from './contants/lexicalAnalysis';
+import { SPECIAL_TOKEN } from './contants/lexicalAnalysis';
 
 /** 
  * @description
@@ -15,6 +15,7 @@ export class SimpleLexer implements ISimpleLexer {
     this.tokenize(code);
   }
 
+  private code: string = '';
   private tokenList: ISimpleToken[] = [];
   private token: ISimpleToken = new SimpleToken();
   private tokenText: string = '';
@@ -26,6 +27,7 @@ export class SimpleLexer implements ISimpleLexer {
    * Rules: judge machine state, go init or just append to text.
    */
   private tokenize: (code: string) => ITokenReader = (code) => {
+    this.code = code;
     let readCharIndex: number = 0;
     let char: string = '';
     let state = DfaState.Initial;
@@ -43,7 +45,7 @@ export class SimpleLexer implements ISimpleLexer {
             }
             break;
           case DfaState.Id_Int1:
-            if (char === INT_ID_TOKEN_SECOND) {
+            if (char === SPECIAL_TOKEN.INT_ID_SECOND) {
               state = DfaState.Id_Int2;
               this.append2TokenText(char);
             } else if (isAlpha(char) || isDight(char)) {
@@ -54,7 +56,7 @@ export class SimpleLexer implements ISimpleLexer {
             }
             break;
           case DfaState.Id_Int2:
-            if (char === INT_ID_TOKEN_END) {
+            if (char === SPECIAL_TOKEN.INT_ID_END) {
               state = DfaState.Id_Int3;
               this.append2TokenText(char);
             } else if (isAlpha(char) || isDight(char)) {
@@ -68,7 +70,7 @@ export class SimpleLexer implements ISimpleLexer {
             if (isBlank(char)) {
               this.changeTokenType(TokenType.Int);
             } else {
-              state = DfaState.Id; 
+              state = DfaState.Id;
               this.append2TokenText(char);
             }
           case DfaState.NumberLiteral:
@@ -78,18 +80,25 @@ export class SimpleLexer implements ISimpleLexer {
               state = this.initToken(char);
             }
             break;
-          case DfaState.Assignment:
-          case DfaState.GE:
-            state = this.initToken(char);
-            break;
           case DfaState.GT:
-            if (isAssignment(char)) {
+            if (char === SPECIAL_TOKEN.ASSIGNMENT) {
               this.token.type = TokenType.GE;
               state = DfaState.GE;
               this.append2TokenText(char);
             } else {
               state = this.initToken(char);
             }
+            break;
+          case DfaState.Assignment:
+          case DfaState.GE:
+          case DfaState.Plus:
+          case DfaState.Minus:
+          case DfaState.Star:
+          case DfaState.Slash:
+          case DfaState.Semicolon:
+          case DfaState.LeftParen:
+          case DfaState.RightParen:
+            state = this.initToken(char);
             break;
         }
       }
@@ -121,20 +130,48 @@ export class SimpleLexer implements ISimpleLexer {
   private getInitCharState: (char: string) => DfaState = (char) => {
     let newState = DfaState.Initial;
     if (isAlpha(char)) {
-      newState = char === INT_ID_TOKEN_BEGIN ? DfaState.Id_Int1 : DfaState.Id;
+      newState = char === SPECIAL_TOKEN.INT_ID_BEGIN ? DfaState.Id_Int1 : DfaState.Id;
       this.changeTokenType(TokenType.Identifier);
       this.append2TokenText(char);
     } else if (isDight(char)) {
       newState = DfaState.NumberLiteral;
       this.changeTokenType(TokenType.NumberLiteral);
       this.append2TokenText(char);
-    } else if (isAssignment(char)) {
+    } else if (char === SPECIAL_TOKEN.ASSIGNMENT) {
       newState = DfaState.Assignment;
       this.changeTokenType(TokenType.Assignment);
       this.append2TokenText(char);
-    } else if (isGT(char)) {
+    } else if (char === SPECIAL_TOKEN.GREATER_THAN) {
       newState = DfaState.GT;
       this.changeTokenType(TokenType.GT);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.PLUS) {
+      newState = DfaState.Plus;
+      this.changeTokenType(TokenType.Plus);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.MINUS) {
+      newState = DfaState.Minus;
+      this.changeTokenType(TokenType.Minus);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.STAR) {
+      newState = DfaState.Star;
+      this.changeTokenType(TokenType.Star);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.SLASH) {
+      newState = DfaState.Slash;
+      this.changeTokenType(TokenType.Slash);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.SEMICOLIN) {
+      newState = DfaState.Semicolon;
+      this.changeTokenType(TokenType.Semicolon);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.LEFT_PAREN) {
+      newState = DfaState.LeftParen;
+      this.changeTokenType(TokenType.LeftParen);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.RIGHT_PAREN) {
+      newState = DfaState.RightParen;
+      this.changeTokenType(TokenType.RightParen);
       this.append2TokenText(char);
     }
     return newState;
@@ -153,11 +190,15 @@ export class SimpleLexer implements ISimpleLexer {
     let token: ISimpleToken | null = null;
     console.log('text\ttype')
     while (token = this.tokenReader.read()) {
-      console.log(token.getText()+"\t"+token.getType());
+      console.log(token.getText() + "\t" + token.getType());
     }
   }
 
   public getTokens = () => {
     return this.tokenList;
+  }
+
+  public getCode = () => {
+    return this.code;
   }
 }

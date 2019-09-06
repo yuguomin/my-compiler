@@ -7,7 +7,14 @@ export enum TokenType {
   StringLiteral = 'StringLiteral',
   Assignment = 'Assignment',
   GE = 'GE',
-  GT = 'GT'
+  GT = 'GT',
+  Plus = 'Plus',
+  Minus = 'Minus',
+  Star = 'Star',
+  Slash = 'Slash',
+  Semicolon = 'Semicolon',
+  LeftParen = 'LeftParen',
+  RightParen = 'RightParen'
 }
 
 export enum DfaState {
@@ -19,10 +26,15 @@ export enum DfaState {
   Assignment,
   NumberLiteral,
   GE,
-  GT
+  GT,
+  Plus, Minus, Star, Slash,
+  Semicolon,
+  LeftParen,
+  RightParen
 }
 
 export interface ISimpleLexer {
   dump(): void;
   getTokens(): ISimpleToken[];
+  getCode(): string;
 }
