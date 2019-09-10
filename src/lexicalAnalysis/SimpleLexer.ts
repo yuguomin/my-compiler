@@ -1,4 +1,4 @@
-import { DfaState, TokenType, ISimpleLexer } from './interface/ISimpleLexer';
+import { ISimpleLexer } from './interface/ISimpleLexer';
 import { TokenReader } from './TokenReader';
 import { ITokenReader } from './interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
@@ -7,6 +7,8 @@ import { ISimpleToken } from './interface/ISimpleToken';
 import { SPECIAL_TOKEN } from './contants/lexicalAnalysis';
 import { isVariableStart } from './utils/isVariableStart';
 import { isVariableFollow } from './utils/isVariableFollow';
+import { DfaState } from './enum/DfaState';
+import { TokenType } from './enum/TokenType';
 
 /** 
  * @description

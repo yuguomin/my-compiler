@@ -1,4 +1,4 @@
-import { TokenType } from './ISimpleLexer';
+import { TokenType } from '../enum/TokenType';
 
 export interface ISimpleToken {
   type: TokenType | null;

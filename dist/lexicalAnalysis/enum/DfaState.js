@@ -1,0 +1,25 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var DfaState;
+(function (DfaState) {
+    DfaState[DfaState["Initial"] = 0] = "Initial";
+    DfaState[DfaState["Id"] = 1] = "Id";
+    DfaState[DfaState["Id_variable1"] = 2] = "Id_variable1";
+    DfaState[DfaState["Id_variable2"] = 3] = "Id_variable2";
+    DfaState[DfaState["Id_variable3"] = 4] = "Id_variable3";
+    DfaState[DfaState["Assignment"] = 5] = "Assignment";
+    DfaState[DfaState["NSC"] = 6] = "NSC";
+    DfaState[DfaState["SC"] = 7] = "SC";
+    DfaState[DfaState["NumberLiteral"] = 8] = "NumberLiteral";
+    DfaState[DfaState["GE"] = 9] = "GE";
+    DfaState[DfaState["GT"] = 10] = "GT";
+    DfaState[DfaState["LT"] = 11] = "LT";
+    DfaState[DfaState["LE"] = 12] = "LE";
+    DfaState[DfaState["Plus"] = 13] = "Plus";
+    DfaState[DfaState["Minus"] = 14] = "Minus";
+    DfaState[DfaState["Star"] = 15] = "Star";
+    DfaState[DfaState["Slash"] = 16] = "Slash";
+    DfaState[DfaState["Semicolon"] = 17] = "Semicolon";
+    DfaState[DfaState["LeftParen"] = 18] = "LeftParen";
+    DfaState[DfaState["RightParen"] = 19] = "RightParen";
+})(DfaState = exports.DfaState || (exports.DfaState = {}));

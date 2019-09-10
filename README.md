@@ -1,1 +1,1 @@
-write a compiler
+write a compiler for JS

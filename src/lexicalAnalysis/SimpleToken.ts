@@ -1,5 +1,5 @@
 import { ISimpleToken } from './interface/ISimpleToken';
-import { TokenType } from './interface/ISimpleLexer';
+import { TokenType } from './enum/TokenType';
 
 export class SimpleToken implements ISimpleToken {
   public type: TokenType | null = null;
