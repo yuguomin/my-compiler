@@ -2,9 +2,11 @@ import { DfaState, TokenType, ISimpleLexer } from './interface/ISimpleLexer';
 import { TokenReader } from './TokenReader';
 import { ITokenReader } from './interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
-import { isAlpha, isDight, isBlank } from '../common/utils/stringVerify';
+import { isAlpha, isDigit, isBlank } from '../common/utils/stringVerify';
 import { ISimpleToken } from './interface/ISimpleToken';
 import { SPECIAL_TOKEN } from './contants/lexicalAnalysis';
+import { isVariableStart } from './utils/isVariableStart';
+import { isVariableFollow } from './utils/isVariableFollow';
 
 /** 
  * @description
@@ -38,7 +40,7 @@ export class SimpleLexer implements ISimpleLexer {
             state = this.initToken(char);
             break;
           case DfaState.Id:
-            if (isAlpha(char) || isDight(char)) {
+            if (isVariableFollow(char)) {
               this.append2TokenText(char);
             } else {
               state = this.initToken(char);
@@ -48,7 +50,7 @@ export class SimpleLexer implements ISimpleLexer {
             if (char === SPECIAL_TOKEN.VARIABLE_ID_SECOND) {
               state = DfaState.Id_variable2;
               this.append2TokenText(char);
-            } else if (isAlpha(char) || isDight(char)) {
+            } else if (isAlpha(char) || isDigit(char)) {
               state = DfaState.Id;
               this.append2TokenText(char);
             } else {
@@ -59,7 +61,7 @@ export class SimpleLexer implements ISimpleLexer {
             if (char === SPECIAL_TOKEN.VARIABLE_ID_END) {
               state = DfaState.Id_variable3;
               this.append2TokenText(char);
-            } else if (isAlpha(char) || isDight(char)) {
+            } else if (isAlpha(char) || isDigit(char)) {
               state = DfaState.Id;
               this.append2TokenText(char);
             } else {
@@ -76,7 +78,7 @@ export class SimpleLexer implements ISimpleLexer {
             }
             break;
           case DfaState.NumberLiteral:
-            if (isDight(char)) {
+            if (isDigit(char)) {
               this.append2TokenText(char);
             } else {
               state = this.initToken(char);
@@ -159,11 +161,11 @@ export class SimpleLexer implements ISimpleLexer {
 
   private getInitCharState: (char: string) => DfaState = (char) => {
     let newState = DfaState.Initial;
-    if (isAlpha(char)) {
+    if (isVariableStart(char)) {
       newState = char === SPECIAL_TOKEN.VARIABLE_ID_BEGIN ? DfaState.Id_variable1 : DfaState.Id;
       this.changeTokenType(TokenType.Identifier);
       this.append2TokenText(char);
-    } else if (isDight(char)) {
+    } else if (isDigit(char)) {
       newState = DfaState.NumberLiteral;
       this.changeTokenType(TokenType.NumberLiteral);
       this.append2TokenText(char);

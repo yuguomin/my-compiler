@@ -12,4 +12,6 @@ export namespace SPECIAL_TOKEN  {
   export const SEMICOLIN = ';';
   export const LEFT_PAREN = '(';
   export const RIGHT_PAREN = ')';
+  export const DOLLAR_SIGN = '$';
+  export const UNDER_LINE = '_';
 }
