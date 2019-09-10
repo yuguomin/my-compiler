@@ -69,10 +69,12 @@ export class SimpleLexer implements ISimpleLexer {
           case DfaState.Id_variable3:
             if (isBlank(char)) {
               this.changeTokenType(TokenType.VariableIdentifier);
+              state = this.initToken(char);
             } else {
               state = DfaState.Id;
               this.append2TokenText(char);
             }
+            break;
           case DfaState.NumberLiteral:
             if (isDight(char)) {
               this.append2TokenText(char);
@@ -82,15 +84,43 @@ export class SimpleLexer implements ISimpleLexer {
             break;
           case DfaState.GT:
             if (char === SPECIAL_TOKEN.ASSIGNMENT) {
-              this.token.type = TokenType.GE;
-              state = DfaState.GE;
+              this.changeTokenType(TokenType.GE);
               this.append2TokenText(char);
+              state = DfaState.GE;
+            } else {
+              state = this.initToken(char);
+            }
+            break;
+          case DfaState.LT:
+            if (char === SPECIAL_TOKEN.ASSIGNMENT) {
+              this.changeTokenType(TokenType.LE);
+              this.append2TokenText(char);
+              state = DfaState.LE;
             } else {
               state = this.initToken(char);
             }
             break;
           case DfaState.Assignment:
+            if (char === SPECIAL_TOKEN.ASSIGNMENT) {
+              this.changeTokenType(TokenType.NSC);
+              this.append2TokenText(char);
+              state = DfaState.NSC;
+            } else {
+              state = this.initToken(char);
+            }
+            break;
+          case DfaState.NSC:
+            if (char === SPECIAL_TOKEN.ASSIGNMENT) {
+              this.changeTokenType(TokenType.SC);
+              this.append2TokenText(char);
+              state = DfaState.SC;
+            } else {
+              state = this.initToken(char);
+            }
+            break;
+          case DfaState.SC:
           case DfaState.GE:
+          case DfaState.LE:
           case DfaState.Plus:
           case DfaState.Minus:
           case DfaState.Star:
@@ -144,6 +174,10 @@ export class SimpleLexer implements ISimpleLexer {
     } else if (char === SPECIAL_TOKEN.GREATER_THAN) {
       newState = DfaState.GT;
       this.changeTokenType(TokenType.GT);
+      this.append2TokenText(char);
+    } else if (char === SPECIAL_TOKEN.LESS_THAN) {
+      newState = DfaState.LT;
+      this.changeTokenType(TokenType.LT);
       this.append2TokenText(char);
     } else if (char === SPECIAL_TOKEN.PLUS) {
       newState = DfaState.Plus;
