@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const TokenReader_1 = require("./TokenReader");
 const SimpleToken_1 = require("./SimpleToken");
 const stringVerify_1 = require("../common/utils/stringVerify");
-const lexicalAnalysis_1 = require("./contants/lexicalAnalysis");
+const SpecialToken_1 = require("./constant/SpecialToken");
 const isVariableStart_1 = require("./utils/isVariableStart");
 const isVariableFollow_1 = require("./utils/isVariableFollow");
 const DfaState_1 = require("./enum/DfaState");
@@ -43,7 +43,7 @@ class SimpleLexer {
                             }
                             break;
                         case DfaState_1.DfaState.Id_variable1:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.VARIABLE_ID_SECOND) {
+                            if (char === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_SECOND) {
                                 state = DfaState_1.DfaState.Id_variable2;
                                 this.append2TokenText(char);
                             }
@@ -56,7 +56,7 @@ class SimpleLexer {
                             }
                             break;
                         case DfaState_1.DfaState.Id_variable2:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.VARIABLE_ID_END) {
+                            if (char === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_END) {
                                 state = DfaState_1.DfaState.Id_variable3;
                                 this.append2TokenText(char);
                             }
@@ -87,7 +87,7 @@ class SimpleLexer {
                             }
                             break;
                         case DfaState_1.DfaState.GT:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.GE);
                                 this.append2TokenText(char);
                                 state = DfaState_1.DfaState.GE;
@@ -97,7 +97,7 @@ class SimpleLexer {
                             }
                             break;
                         case DfaState_1.DfaState.LT:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.LE);
                                 this.append2TokenText(char);
                                 state = DfaState_1.DfaState.LE;
@@ -107,7 +107,7 @@ class SimpleLexer {
                             }
                             break;
                         case DfaState_1.DfaState.Assignment:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.NSC);
                                 this.append2TokenText(char);
                                 state = DfaState_1.DfaState.NSC;
@@ -117,7 +117,7 @@ class SimpleLexer {
                             }
                             break;
                         case DfaState_1.DfaState.NSC:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.SC);
                                 this.append2TokenText(char);
                                 state = DfaState_1.DfaState.SC;
@@ -167,7 +167,7 @@ class SimpleLexer {
         this.getInitCharState = (char) => {
             let newState = DfaState_1.DfaState.Initial;
             if (isVariableStart_1.isVariableStart(char)) {
-                newState = char === lexicalAnalysis_1.SPECIAL_TOKEN.VARIABLE_ID_BEGIN ? DfaState_1.DfaState.Id_variable1 : DfaState_1.DfaState.Id;
+                newState = char === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_BEGIN ? DfaState_1.DfaState.Id_variable1 : DfaState_1.DfaState.Id;
                 this.changeTokenType(TokenType_1.TokenType.Identifier);
                 this.append2TokenText(char);
             }
@@ -176,52 +176,52 @@ class SimpleLexer {
                 this.changeTokenType(TokenType_1.TokenType.NumberLiteral);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.ASSIGNMENT) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                 newState = DfaState_1.DfaState.Assignment;
                 this.changeTokenType(TokenType_1.TokenType.Assignment);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.GREATER_THAN) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.GREATER_THAN) {
                 newState = DfaState_1.DfaState.GT;
                 this.changeTokenType(TokenType_1.TokenType.GT);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.LESS_THAN) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.LESS_THAN) {
                 newState = DfaState_1.DfaState.LT;
                 this.changeTokenType(TokenType_1.TokenType.LT);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.PLUS) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.PLUS) {
                 newState = DfaState_1.DfaState.Plus;
                 this.changeTokenType(TokenType_1.TokenType.Plus);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.MINUS) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.MINUS) {
                 newState = DfaState_1.DfaState.Minus;
                 this.changeTokenType(TokenType_1.TokenType.Minus);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.STAR) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.STAR) {
                 newState = DfaState_1.DfaState.Star;
                 this.changeTokenType(TokenType_1.TokenType.Star);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.SLASH) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.SLASH) {
                 newState = DfaState_1.DfaState.Slash;
                 this.changeTokenType(TokenType_1.TokenType.Slash);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.SEMICOLIN) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.SEMICOLIN) {
                 newState = DfaState_1.DfaState.Semicolon;
                 this.changeTokenType(TokenType_1.TokenType.Semicolon);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.LEFT_PAREN) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.LEFT_PAREN) {
                 newState = DfaState_1.DfaState.LeftParen;
                 this.changeTokenType(TokenType_1.TokenType.LeftParen);
                 this.append2TokenText(char);
             }
-            else if (char === lexicalAnalysis_1.SPECIAL_TOKEN.RIGHT_PAREN) {
+            else if (char === SpecialToken_1.SPECIAL_TOKEN.RIGHT_PAREN) {
                 newState = DfaState_1.DfaState.RightParen;
                 this.changeTokenType(TokenType_1.TokenType.RightParen);
                 this.append2TokenText(char);
