@@ -44,9 +44,9 @@ export class SimpleLexer implements ISimpleLexer {
               state = this.initToken(char);
             }
             break;
-          case DfaState.Id_Int1:
-            if (char === SPECIAL_TOKEN.INT_ID_SECOND) {
-              state = DfaState.Id_Int2;
+          case DfaState.Id_variable1:
+            if (char === SPECIAL_TOKEN.VARIABLE_ID_SECOND) {
+              state = DfaState.Id_variable2;
               this.append2TokenText(char);
             } else if (isAlpha(char) || isDight(char)) {
               state = DfaState.Id;
@@ -55,9 +55,9 @@ export class SimpleLexer implements ISimpleLexer {
               state = this.initToken(char);
             }
             break;
-          case DfaState.Id_Int2:
-            if (char === SPECIAL_TOKEN.INT_ID_END) {
-              state = DfaState.Id_Int3;
+          case DfaState.Id_variable2:
+            if (char === SPECIAL_TOKEN.VARIABLE_ID_END) {
+              state = DfaState.Id_variable3;
               this.append2TokenText(char);
             } else if (isAlpha(char) || isDight(char)) {
               state = DfaState.Id;
@@ -66,9 +66,9 @@ export class SimpleLexer implements ISimpleLexer {
               state = this.initToken(char);
             }
             break;
-          case DfaState.Id_Int3:
+          case DfaState.Id_variable3:
             if (isBlank(char)) {
-              this.changeTokenType(TokenType.Int);
+              this.changeTokenType(TokenType.VariableIdentifier);
             } else {
               state = DfaState.Id;
               this.append2TokenText(char);
@@ -130,7 +130,7 @@ export class SimpleLexer implements ISimpleLexer {
   private getInitCharState: (char: string) => DfaState = (char) => {
     let newState = DfaState.Initial;
     if (isAlpha(char)) {
-      newState = char === SPECIAL_TOKEN.INT_ID_BEGIN ? DfaState.Id_Int1 : DfaState.Id;
+      newState = char === SPECIAL_TOKEN.VARIABLE_ID_BEGIN ? DfaState.Id_variable1 : DfaState.Id;
       this.changeTokenType(TokenType.Identifier);
       this.append2TokenText(char);
     } else if (isDight(char)) {

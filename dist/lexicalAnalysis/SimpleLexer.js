@@ -39,9 +39,9 @@ class SimpleLexer {
                                 state = this.initToken(char);
                             }
                             break;
-                        case ISimpleLexer_1.DfaState.Id_Int1:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.INT_ID_SECOND) {
-                                state = ISimpleLexer_1.DfaState.Id_Int2;
+                        case ISimpleLexer_1.DfaState.Id_variable1:
+                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.VARIABLE_ID_SECOND) {
+                                state = ISimpleLexer_1.DfaState.Id_variable2;
                                 this.append2TokenText(char);
                             }
                             else if (stringVerify_1.isAlpha(char) || stringVerify_1.isDight(char)) {
@@ -52,9 +52,9 @@ class SimpleLexer {
                                 state = this.initToken(char);
                             }
                             break;
-                        case ISimpleLexer_1.DfaState.Id_Int2:
-                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.INT_ID_END) {
-                                state = ISimpleLexer_1.DfaState.Id_Int3;
+                        case ISimpleLexer_1.DfaState.Id_variable2:
+                            if (char === lexicalAnalysis_1.SPECIAL_TOKEN.VARIABLE_ID_END) {
+                                state = ISimpleLexer_1.DfaState.Id_variable3;
                                 this.append2TokenText(char);
                             }
                             else if (stringVerify_1.isAlpha(char) || stringVerify_1.isDight(char)) {
@@ -65,9 +65,9 @@ class SimpleLexer {
                                 state = this.initToken(char);
                             }
                             break;
-                        case ISimpleLexer_1.DfaState.Id_Int3:
+                        case ISimpleLexer_1.DfaState.Id_variable3:
                             if (stringVerify_1.isBlank(char)) {
-                                this.changeTokenType(ISimpleLexer_1.TokenType.Int);
+                                this.changeTokenType(ISimpleLexer_1.TokenType.VariableIdentifier);
                             }
                             else {
                                 state = ISimpleLexer_1.DfaState.Id;
@@ -131,7 +131,7 @@ class SimpleLexer {
         this.getInitCharState = (char) => {
             let newState = ISimpleLexer_1.DfaState.Initial;
             if (stringVerify_1.isAlpha(char)) {
-                newState = char === lexicalAnalysis_1.SPECIAL_TOKEN.INT_ID_BEGIN ? ISimpleLexer_1.DfaState.Id_Int1 : ISimpleLexer_1.DfaState.Id;
+                newState = char === lexicalAnalysis_1.SPECIAL_TOKEN.VARIABLE_ID_BEGIN ? ISimpleLexer_1.DfaState.Id_variable1 : ISimpleLexer_1.DfaState.Id;
                 this.changeTokenType(ISimpleLexer_1.TokenType.Identifier);
                 this.append2TokenText(char);
             }

@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var SPECIAL_TOKEN;
 (function (SPECIAL_TOKEN) {
-    SPECIAL_TOKEN.INT_ID_BEGIN = 'i';
-    SPECIAL_TOKEN.INT_ID_SECOND = 'n';
-    SPECIAL_TOKEN.INT_ID_END = 't';
+    SPECIAL_TOKEN.VARIABLE_ID_BEGIN = 'v';
+    SPECIAL_TOKEN.VARIABLE_ID_SECOND = 'a';
+    SPECIAL_TOKEN.VARIABLE_ID_END = 'r';
     SPECIAL_TOKEN.GREATER_THAN = '>';
     SPECIAL_TOKEN.ASSIGNMENT = '=';
     SPECIAL_TOKEN.PLUS = '+';
