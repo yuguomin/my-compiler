@@ -16,7 +16,7 @@ import { TokenType } from './enum/TokenType';
  */
 export class SimpleLexer implements ISimpleLexer {
   constructor(code: string) {
-    this.tokenize(code);
+    this.tokenReader = this.tokenize(code);
   }
 
   private code: string = '';
@@ -142,7 +142,7 @@ export class SimpleLexer implements ISimpleLexer {
     } catch (err) {
       console.log('err:', err);
     }
-    return this.tokenReader = new TokenReader(this.tokenList);
+    return new TokenReader(this.tokenList);
   }
 
   /**

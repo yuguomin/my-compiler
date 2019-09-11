@@ -147,7 +147,7 @@ class SimpleLexer {
             catch (err) {
                 console.log('err:', err);
             }
-            return this.tokenReader = new TokenReader_1.TokenReader(this.tokenList);
+            return new TokenReader_1.TokenReader(this.tokenList);
         };
         /**
          * @description
@@ -247,7 +247,7 @@ class SimpleLexer {
         this.getCode = () => {
             return this.code;
         };
-        this.tokenize(code);
+        this.tokenReader = this.tokenize(code);
     }
 }
 exports.SimpleLexer = SimpleLexer;
