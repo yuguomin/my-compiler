@@ -1,0 +1,30 @@
+import { IASTNode } from "./interface/IAstNode";
+import { ASTNodeType } from "./enum/ASTNodeType";
+
+export class SimpleASTNode implements IASTNode {
+  constructor(nodeType: ASTNodeType, text: string) {
+    this.nodeType = nodeType;
+    this.text = text;
+  }
+
+  private parentNode: IASTNode | null = null;
+  private childrenNodes: IASTNode[] = [];
+  private nodeType: ASTNodeType | null = null;
+  private text: string | null = null;
+
+  public getParent = () => {
+    return this.parentNode;
+  }
+
+  public getChildren = () => {
+    return this.childrenNodes;
+  }
+
+  public getType = () => {
+    return this.nodeType;
+  }
+
+  public getText = () => {
+    return this.text;
+  }
+}
