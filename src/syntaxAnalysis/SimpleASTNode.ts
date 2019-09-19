@@ -16,6 +16,10 @@ export class SimpleASTNode implements IASTNode {
     return this.parentNode;
   }
 
+  public setParent = (parentNode: IASTNode) => {
+    this.parentNode = parentNode;
+  }
+
   public getChildren = () => {
     return this.childrenNodes;
   }
@@ -26,5 +30,10 @@ export class SimpleASTNode implements IASTNode {
 
   public getText = () => {
     return this.text;
+  }
+
+  public append2Child = (childrenNode: IASTNode) => {
+    this.childrenNodes.push(childrenNode);
+    childrenNode.setParent(this);
   }
 }

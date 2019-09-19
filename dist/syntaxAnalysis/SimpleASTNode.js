@@ -9,6 +9,9 @@ class SimpleASTNode {
         this.getParent = () => {
             return this.parentNode;
         };
+        this.setParent = (parentNode) => {
+            this.parentNode = parentNode;
+        };
         this.getChildren = () => {
             return this.childrenNodes;
         };
@@ -17,6 +20,10 @@ class SimpleASTNode {
         };
         this.getText = () => {
             return this.text;
+        };
+        this.append2Child = (childrenNode) => {
+            this.childrenNodes.push(childrenNode);
+            childrenNode.setParent(this);
         };
         this.nodeType = nodeType;
         this.text = text;

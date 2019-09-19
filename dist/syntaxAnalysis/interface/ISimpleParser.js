@@ -1,3 +1,2 @@
-// export interface ISimpleParser {
-//   dumpAST(): void;
-// }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

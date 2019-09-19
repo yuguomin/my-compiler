@@ -1,3 +1,3 @@
-// export interface ISimpleParser {
-//   dumpAST(): void;
-// }
+export interface ISimpleParser {
+  dumpAST(): void;
+}
