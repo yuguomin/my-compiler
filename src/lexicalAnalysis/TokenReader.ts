@@ -15,4 +15,11 @@ export class TokenReader implements ITokenReader {
     }
     return null;
   }
+
+  public peek() {
+    if (this.pos < this.tokenList.length) {
+      return this.tokenList[this.pos];
+    }
+    return null;
+  }
 }

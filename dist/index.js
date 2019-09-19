@@ -11,5 +11,5 @@ const calculateToken = new SimpleLexer_1.SimpleLexer('2 + 3 * 5 / 3 * ( 4 + 6 );
 // compareToken.dump();
 // console.log('\ncode:', calculateToken.getCode());
 // calculateToken.dump();
-const assignmentParser = new SimpleParser_1.SimpleParser('var a = 1;');
+const assignmentParser = new SimpleParser_1.SimpleParser('var $_asb = 1;');
 assignmentParser.dumpAST();

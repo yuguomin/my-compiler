@@ -1,3 +1,5 @@
+import { IASTNode } from "./IAstNode";
+
 export interface ISimpleParser {
-  dumpAST(): void;
+  dumpAST(indent?: string, rootNode?: IASTNode | null): void;
 }

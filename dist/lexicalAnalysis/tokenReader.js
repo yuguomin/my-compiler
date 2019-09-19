@@ -12,5 +12,11 @@ class TokenReader {
         }
         return null;
     }
+    peek() {
+        if (this.pos < this.tokenList.length) {
+            return this.tokenList[this.pos];
+        }
+        return null;
+    }
 }
 exports.TokenReader = TokenReader;
