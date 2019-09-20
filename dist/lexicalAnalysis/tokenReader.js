@@ -18,5 +18,11 @@ class TokenReader {
         }
         return null;
     }
+    getPosition() {
+        return this.pos;
+    }
+    setPosition(pos) {
+        this.pos = pos;
+    }
 }
 exports.TokenReader = TokenReader;

@@ -1,5 +1,7 @@
 export enum ASTNodeType {
   Program = 'Program',
   VariableDeclare = 'VariableDeclare',
-  NumberLiteral = 'NumberLiteral'
+  NumberLiteral = 'NumberLiteral',
+  Identifier = 'Identifier',
+  Multiplicative = 'Multiplicative'
 }

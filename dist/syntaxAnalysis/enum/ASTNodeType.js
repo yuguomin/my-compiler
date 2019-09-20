@@ -5,4 +5,6 @@ var ASTNodeType;
     ASTNodeType["Program"] = "Program";
     ASTNodeType["VariableDeclare"] = "VariableDeclare";
     ASTNodeType["NumberLiteral"] = "NumberLiteral";
+    ASTNodeType["Identifier"] = "Identifier";
+    ASTNodeType["Multiplicative"] = "Multiplicative";
 })(ASTNodeType = exports.ASTNodeType || (exports.ASTNodeType = {}));

@@ -22,4 +22,12 @@ export class TokenReader implements ITokenReader {
     }
     return null;
   }
+
+  public getPosition() {
+    return this.pos;
+  }
+
+  public setPosition(pos: number) {
+    this.pos = pos;
+  }
 }

@@ -6,9 +6,13 @@ const SimpleLexer_1 = require("../lexicalAnalysis/SimpleLexer");
 const TokenType_1 = require("../lexicalAnalysis/enum/TokenType");
 /**
  * @description write a syntax analyzer
- * can parse:
- * initializeStatement | assignmentStatement | expressionStatement
  * will get a root node
+ * can parse:
+ * programm -> initializeStatement | expressionStatement | assignmentStatement
+ * initializeStatement -> 'var' Id ( '=' additive) ';'
+ * addtive -> multiplicative (('+' | '-') multiplicative)*
+ * multiplicative -> primary (('* ' | '/') primary)*
+ * primary -> number | Id | (additive)
  */
 class SimpleParser {
     constructor(code) {
@@ -23,8 +27,14 @@ class SimpleParser {
                 if (this.tokenReader.peek()) {
                     // test every parse, no success will return null, test next 
                     let childNode = this.variableDeclare(this.tokenReader);
+                    if (childNode === null) {
+                        childNode = this.expressionStatement(this.tokenReader);
+                    }
                     if (childNode) {
                         node.append2Child(childNode);
+                    }
+                    else {
+                        throw new Error('unknown statement');
                     }
                 }
             }
@@ -49,7 +59,7 @@ class SimpleParser {
                             node.append2Child(child);
                         }
                         else {
-                            throw new Error("invalide variable initialization, expecting an expression");
+                            throw new Error('invalide variable initialization, expecting an expression');
                         }
                     }
                 }
@@ -63,14 +73,70 @@ class SimpleParser {
                     tokenReader.read();
                 }
                 else {
-                    throw new Error("invalid statement, expecting semicolon");
+                    throw new Error('invalid statement, expecting semicolon');
                 }
             }
             return node;
         };
+        this.expressionStatement = (tokenReader) => {
+            const pos = tokenReader.getPosition();
+            const node = this.additive(tokenReader);
+            return node;
+        };
+        /**
+         * @description Analysis of additive expression
+         */
         this.additive = (tokenReader) => {
             tokenReader.read();
-            return new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.NumberLiteral, '123');
+            // return new SimpleASTNode(ASTNodeType.NumberLiteral, '123');
+            return null;
+        };
+        /**
+         * @description Analysis of multiplicative expression
+         * multiplicative -> primary (('* ' | '/') primary)*
+         */
+        this.multiplicative = (tokenReader) => {
+            const child1 = this.primary(tokenReader);
+            let node = child1;
+            while (child1) {
+                let token = tokenReader.peek();
+                const tokenType = token ? token.getType() : null;
+                if (tokenType && [TokenType_1.TokenType.Star, TokenType_1.TokenType.Slash].includes(tokenType)) {
+                    token = tokenReader.read();
+                    const child2 = this.primary(tokenReader);
+                    if (child2) {
+                        const tokenText = token ? token.getText() : '';
+                        node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Multiplicative, tokenText);
+                        node.append2Child(child1);
+                        node.append2Child(child2);
+                    }
+                    else {
+                        throw new Error('invalid multiplicative expression, expecting the right part.');
+                    }
+                }
+            }
+            return node;
+        };
+        /**
+         * @description Analysis of primary expression
+         */
+        this.primary = (tokenReader) => {
+            // tokenReader.read();
+            // return new SimpleASTNode(ASTNodeType.NumberLiteral, '123');
+            let node = null;
+            let token = tokenReader.peek();
+            if (token) {
+                const tokenType = token.getType();
+                if (tokenType === TokenType_1.TokenType.NumberLiteral) {
+                    tokenReader.read();
+                    node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.NumberLiteral, token.getText());
+                }
+                else if (tokenType === TokenType_1.TokenType.Identifier) {
+                    tokenReader.read();
+                    node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Identifier, token.getText());
+                }
+            }
+            return node;
         };
         this.dumpAST = (indent = '', rootNode = this.rootNode) => {
             if (rootNode) {
