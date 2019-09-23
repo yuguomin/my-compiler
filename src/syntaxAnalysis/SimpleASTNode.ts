@@ -1,5 +1,5 @@
-import { IASTNode } from "./interface/IAstNode";
-import { ASTNodeType } from "./enum/ASTNodeType";
+import { IASTNode } from './interface/IAstNode';
+import { ASTNodeType } from './enum/ASTNodeType';
 
 export class SimpleASTNode implements IASTNode {
   constructor(nodeType: ASTNodeType, text: string) {

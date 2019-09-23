@@ -1,5 +1,5 @@
-import { SimpleLexer } from "./lexicalAnalysis/SimpleLexer";
-import { SimpleParser } from "./syntaxAnalysis/SimpleParser";
+import { SimpleLexer } from './lexicalAnalysis/SimpleLexer';
+import { SimpleParser } from './syntaxAnalysis/SimpleParser';
 
 const assignmentToken = new SimpleLexer('var 1$asd_1<=>===123;');
 const compareToken = new SimpleLexer('asdddd >= 123');
@@ -12,6 +12,6 @@ const calculateToken = new SimpleLexer('2 + 3 * 5 / 3 * ( 4 + 6 );');
 // console.log('\ncode:', calculateToken.getCode());
 // calculateToken.dump();
 
-const assignmentParser = new SimpleParser('3+4*5;');
+const assignmentParser = new SimpleParser('3*4+5;');
 
 assignmentParser.dumpAST();

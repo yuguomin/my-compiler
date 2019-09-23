@@ -1,4 +1,4 @@
-import { ASTNodeType } from "../enum/ASTNodeType";
+import { ASTNodeType } from '../enum/ASTNodeType';
 
 export interface IASTNode {
   getParent(): IASTNode | null;

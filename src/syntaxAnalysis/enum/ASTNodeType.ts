@@ -3,5 +3,6 @@ export enum ASTNodeType {
   VariableDeclare = 'VariableDeclare',
   NumberLiteral = 'NumberLiteral',
   Identifier = 'Identifier',
+  Additive = 'Additive',
   Multiplicative = 'Multiplicative'
 }

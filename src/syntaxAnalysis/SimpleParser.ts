@@ -96,9 +96,28 @@ export class SimpleParser implements ISimpleParser {
    * @description Analysis of additive expression
    */
   private additive: (tokenReader: ITokenReader) => IASTNode | null = (tokenReader) => {
-    tokenReader.read();
-    // return new SimpleASTNode(ASTNodeType.NumberLiteral, '123');
-    return null;
+    // tokenReader.read();
+    let child1 = this.multiplicative(tokenReader);
+    let node = child1;
+
+    while (child1) {
+      let token = tokenReader.peek();
+      const tokenType = token ? token.getType() : null;
+      if (tokenType && [TokenType.Plus, TokenType.Minus].includes(tokenType)) {
+        token = tokenReader.read();
+        const child2 = this.multiplicative(tokenReader);
+        if (child2) {
+          const tokenText = token ? token.getText() : '';
+          node = new SimpleASTNode(ASTNodeType.Additive, tokenText)
+          node.append2Child(child1);
+          node.append2Child(child2);
+          child1 = node;
+        } else {
+          throw new Error('invalid additive expression, expecting the right part.');
+        }
+      } else { break; }
+    }
+    return node;
   }
 
   /**
@@ -106,7 +125,7 @@ export class SimpleParser implements ISimpleParser {
    * multiplicative -> primary (('* ' | '/') primary)*
    */
   private multiplicative: (tokenReader: ITokenReader) => IASTNode | null = (tokenReader) => {
-    const child1 = this.primary(tokenReader);
+    let child1 = this.primary(tokenReader);
     let node = child1;
     
     while (child1) {
@@ -120,10 +139,11 @@ export class SimpleParser implements ISimpleParser {
           node = new SimpleASTNode(ASTNodeType.Multiplicative, tokenText);
           node.append2Child(child1);
           node.append2Child(child2);
+          child1 = node;
         } else {
           throw new Error('invalid multiplicative expression, expecting the right part.');
         }
-      }
+      } else { break; }
     }
     return node;
   }
