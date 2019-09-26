@@ -1,5 +1,5 @@
 import { isAlpha, isDigit } from "../../common/utils/stringVerify";
-import { SPECIAL_TOKEN } from "../constant/SpecialToken";
+import { SPECIAL_TOKEN } from "../../common/constant/SpecialToken";
 
 export const isVariableFollow: (char: string) => boolean = (char) => {
   return isAlpha(char) || isDigit(char) || [SPECIAL_TOKEN.DOLLAR_SIGN, SPECIAL_TOKEN.UNDER_LINE].includes(char);

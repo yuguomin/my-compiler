@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const TokenReader_1 = require("./TokenReader");
 const SimpleToken_1 = require("./SimpleToken");
 const stringVerify_1 = require("../common/utils/stringVerify");
-const SpecialToken_1 = require("./constant/SpecialToken");
+const SpecialToken_1 = require("../common/constant/SpecialToken");
 const isVariableStart_1 = require("./utils/isVariableStart");
 const isVariableFollow_1 = require("./utils/isVariableFollow");
 const DfaState_1 = require("./enum/DfaState");

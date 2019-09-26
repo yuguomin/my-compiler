@@ -4,7 +4,7 @@ import { ITokenReader } from './interface/ITokenReader';
 import { SimpleToken } from './SimpleToken';
 import { isAlpha, isDigit, isBlank } from '../common/utils/stringVerify';
 import { ISimpleToken } from './interface/ISimpleToken';
-import { SPECIAL_TOKEN } from './constant/SpecialToken';
+import { SPECIAL_TOKEN } from '../common/constant/SpecialToken';
 import { isVariableStart } from './utils/isVariableStart';
 import { isVariableFollow } from './utils/isVariableFollow';
 import { DfaState } from './enum/DfaState';
