@@ -6,10 +6,8 @@
   "author": "ygm",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
-    "dev": "tsc -w"
-  },
-  "devDependencies": {
-    "@types/node": "^10.5.6"
+    "test": "node ./dist/index",
+    "dev": "tsc -w",
+    "build": "rm -rf ./dist && tsc"
   }
 }

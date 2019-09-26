@@ -4,7 +4,7 @@ import { SimpleCalculator } from './syntaxCalculator/SimpleCalculator';
 
 /**
  * @description test token parse
- */ 
+ */
 
 const assignmentToken = new SimpleLexer('var 1$asd_1<=>===123;');
 const compareToken = new SimpleLexer('asdddd >= 123');
@@ -20,7 +20,7 @@ const calculateToken = new SimpleLexer('2 + 3 * 5 / 3 * ( 4 + 6 );');
 
 /**
  * @description test syntax parse
- */ 
+ */
 
 const parser1 = new SimpleParser('var a = 1 + (3 + 2) * 77 - 4;');
 const parser2 = new SimpleParser('a = 1 + (3 + 2) * 77 - 4;');
@@ -32,7 +32,7 @@ const parser3 = new SimpleParser('1 + (3 + 2) * 77 - 4;');
 
 /**
  * @description use syntax parse get expression calculator
- */ 
+ */
 
 const calculator1 = new SimpleCalculator('1+1;');
 const calculator2 = new SimpleCalculator('1 + 4 * (3 / 2);');
