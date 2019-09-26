@@ -23,6 +23,12 @@ export class TokenReader implements ITokenReader {
     return null;
   }
 
+  public unRead() {
+    if (this.pos > 0) {
+      this.pos -= 1;
+    }
+  }
+
   public getPosition() {
     return this.pos;
   }

@@ -18,6 +18,11 @@ class TokenReader {
         }
         return null;
     }
+    unRead() {
+        if (this.pos > 0) {
+            this.pos -= 1;
+        }
+    }
     getPosition() {
         return this.pos;
     }

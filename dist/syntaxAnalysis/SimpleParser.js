@@ -6,7 +6,7 @@ const SimpleLexer_1 = require("../lexicalAnalysis/SimpleLexer");
 const TokenType_1 = require("../lexicalAnalysis/enum/TokenType");
 /**
  * @description write a syntax analyzer
- * will get a root node
+ * use to get a root node
  * can parse:
  * programm -> initializeStatement | expressionStatement | assignmentStatement
  * initializeStatement -> 'var' Id ( '=' additive) ';'
@@ -29,6 +29,9 @@ class SimpleParser {
                     let childNode = this.variableDeclare(this.tokenReader);
                     if (childNode === null) {
                         childNode = this.expressionStatement(this.tokenReader);
+                    }
+                    if (childNode === null) {
+                        childNode = this.assignmentStatement(this.tokenReader);
                     }
                     if (childNode) {
                         node.append2Child(childNode);
@@ -54,6 +57,7 @@ class SimpleParser {
                     token = tokenReader.peek();
                     if (token && token.getType() === TokenType_1.TokenType.Assignment) {
                         tokenReader.read();
+                        // Only expressions are currently supported，can add string boolean and so on
                         const child = this.additive(tokenReader);
                         if (child) {
                             node.append2Child(child);
@@ -80,14 +84,47 @@ class SimpleParser {
         };
         this.expressionStatement = (tokenReader) => {
             const pos = tokenReader.getPosition();
-            const node = this.additive(tokenReader);
+            let node = this.additive(tokenReader);
+            // verify next token is semicolon
+            if (node) {
+                this.isSemicolonToken(tokenReader, () => {
+                    node = null;
+                    tokenReader.setPosition(pos);
+                });
+            }
+            return node;
+        };
+        this.assignmentStatement = (tokenReader) => {
+            let node = null;
+            let token = tokenReader.peek();
+            if (token && token.getType() === TokenType_1.TokenType.Identifier) {
+                tokenReader.read();
+                node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Identifier, token.getText());
+                token = tokenReader.peek();
+                if (token && token.getType() === TokenType_1.TokenType.Assignment) {
+                    tokenReader.read();
+                    let child = this.additive(tokenReader);
+                    if (child) {
+                        node.append2Child(child);
+                        this.isSemicolonToken(tokenReader, () => {
+                            throw new Error('invalid statement, expecting semicolon');
+                        });
+                    }
+                    else {
+                        throw new Error('invalide assignment statement, expecting an expression');
+                    }
+                }
+                else {
+                    tokenReader.unRead();
+                    node = null;
+                }
+            }
             return node;
         };
         /**
          * @description Analysis of additive expression
          */
         this.additive = (tokenReader) => {
-            // tokenReader.read();
             let child1 = this.multiplicative(tokenReader);
             let node = child1;
             while (child1) {
@@ -163,6 +200,15 @@ class SimpleParser {
                 }
             }
             return node;
+        };
+        this.isSemicolonToken = (tokenReader, unSemicolonCb = () => { }) => {
+            const token = tokenReader.peek();
+            if (token != null && token.getType() == TokenType_1.TokenType.Semicolon) {
+                tokenReader.read();
+            }
+            else {
+                unSemicolonCb();
+            }
         };
         this.dumpAST = (indent = '', rootNode = this.rootNode) => {
             if (rootNode) {

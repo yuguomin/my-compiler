@@ -3,6 +3,7 @@ import { ISimpleToken } from './ISimpleToken';
 export interface ITokenReader {
   read(): ISimpleToken | null;
   peek(): ISimpleToken | null;
+  unRead(): void;
   getPosition(): number;
-  getPosition(pos: number): void;
+  setPosition(pos: number): void;
 }

@@ -8,4 +8,5 @@ var ASTNodeType;
     ASTNodeType["Identifier"] = "Identifier";
     ASTNodeType["Additive"] = "Additive";
     ASTNodeType["Multiplicative"] = "Multiplicative";
+    ASTNodeType["AssignmentStmt"] = "AssignmentStmt";
 })(ASTNodeType = exports.ASTNodeType || (exports.ASTNodeType = {}));

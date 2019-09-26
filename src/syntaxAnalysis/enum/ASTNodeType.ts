@@ -4,5 +4,6 @@ export enum ASTNodeType {
   NumberLiteral = 'NumberLiteral',
   Identifier = 'Identifier',
   Additive = 'Additive',
-  Multiplicative = 'Multiplicative'
+  Multiplicative = 'Multiplicative',
+  AssignmentStmt = 'AssignmentStmt'
 }

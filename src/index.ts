@@ -12,6 +12,6 @@ const calculateToken = new SimpleLexer('2 + 3 * 5 / 3 * ( 4 + 6 );');
 // console.log('\ncode:', calculateToken.getCode());
 // calculateToken.dump();
 
-const assignmentParser = new SimpleParser('3*4+5;');
+const assignmentParser = new SimpleParser('a = 1 + 3 + 2 * 77 - 4;');
 
 assignmentParser.dumpAST();
