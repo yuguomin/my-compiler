@@ -12,7 +12,7 @@ import { TokenType } from '../lexicalAnalysis/enum/TokenType';
  * can parse:
  * programm -> initializeStatement | expressionStatement | assignmentStatement
  * initializeStatement -> 'var' Id ( '=' additive) ';'
- * addtive -> multiplicative (('+' | '-') multiplicative)*
+ * additive -> multiplicative (('+' | '-') multiplicative)*
  * multiplicative -> primary (('* ' | '/') primary)*
  * primary -> number | Id | (additive)
  */
@@ -133,6 +133,7 @@ export class SimpleParser implements ISimpleParser {
 
   /**
    * @description Analysis of additive expression
+   * additive -> multiplicative (('+' | '-') multiplicative)*
    */
   private additive: (tokenReader: ITokenReader) => IASTNode | null = (tokenReader) => {
     let child1 = this.multiplicative(tokenReader);
@@ -188,10 +189,10 @@ export class SimpleParser implements ISimpleParser {
 
   /**
    * @description Analysis of primary expression
+   * primary -> number | Id | (additive)
+   * var a = 1 + (3 + 2) * 77 - 4;
    */
   private primary: (tokenReader: ITokenReader) => IASTNode | null = (tokenReader) => {
-    // tokenReader.read();
-    // return new SimpleASTNode(ASTNodeType.NumberLiteral, '123');
     let node: IASTNode | null = null;
     let token = tokenReader.peek();
     if (token) {
@@ -202,6 +203,19 @@ export class SimpleParser implements ISimpleParser {
       } else if (tokenType === TokenType.Identifier) {
         tokenReader.read();
         node = new SimpleASTNode(ASTNodeType.Identifier, token.getText());
+      } else if (tokenType === TokenType.LeftParen) {
+        tokenReader.read();
+        node = this.additive(tokenReader);
+        if (node) {
+          token = tokenReader.peek();
+          if (token && token.getType() === TokenType.RightParen) {
+            tokenReader.read();
+          } else {
+            throw new Error('expecting right parenthesis');
+          }
+        } else {
+          throw new Error('expecting an additive expression inside parenthesis');
+        }
       }
     }
     return node;

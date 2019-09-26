@@ -10,7 +10,7 @@ const TokenType_1 = require("../lexicalAnalysis/enum/TokenType");
  * can parse:
  * programm -> initializeStatement | expressionStatement | assignmentStatement
  * initializeStatement -> 'var' Id ( '=' additive) ';'
- * addtive -> multiplicative (('+' | '-') multiplicative)*
+ * additive -> multiplicative (('+' | '-') multiplicative)*
  * multiplicative -> primary (('* ' | '/') primary)*
  * primary -> number | Id | (additive)
  */
@@ -123,6 +123,7 @@ class SimpleParser {
         };
         /**
          * @description Analysis of additive expression
+         * additive -> multiplicative (('+' | '-') multiplicative)*
          */
         this.additive = (tokenReader) => {
             let child1 = this.multiplicative(tokenReader);
@@ -182,10 +183,10 @@ class SimpleParser {
         };
         /**
          * @description Analysis of primary expression
+         * primary -> number | Id | (additive)
+         * var a = 1 + (3 + 2) * 77 - 4;
          */
         this.primary = (tokenReader) => {
-            // tokenReader.read();
-            // return new SimpleASTNode(ASTNodeType.NumberLiteral, '123');
             let node = null;
             let token = tokenReader.peek();
             if (token) {
@@ -197,6 +198,22 @@ class SimpleParser {
                 else if (tokenType === TokenType_1.TokenType.Identifier) {
                     tokenReader.read();
                     node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Identifier, token.getText());
+                }
+                else if (tokenType === TokenType_1.TokenType.LeftParen) {
+                    tokenReader.read();
+                    node = this.additive(tokenReader);
+                    if (node) {
+                        token = tokenReader.peek();
+                        if (token && token.getType() === TokenType_1.TokenType.RightParen) {
+                            tokenReader.read();
+                        }
+                        else {
+                            throw new Error('expecting right parenthesis');
+                        }
+                    }
+                    else {
+                        throw new Error('expecting an additive expression inside parenthesis');
+                    }
                 }
             }
             return node;
