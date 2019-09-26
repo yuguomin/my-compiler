@@ -234,4 +234,8 @@ export class SimpleParser implements ISimpleParser {
       });
     }
   }
+
+  public getRootNode = () => {
+    return this.rootNode;
+  }
 }

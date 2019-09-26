@@ -233,6 +233,9 @@ class SimpleParser {
                 });
             }
         };
+        this.getRootNode = () => {
+            return this.rootNode;
+        };
         this.tokenReader = this.getTokenReader(code);
         this.rootNode = this.syntaxParse();
     }

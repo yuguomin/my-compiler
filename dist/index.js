@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const SimpleLexer_1 = require("./lexicalAnalysis/SimpleLexer");
 const SimpleParser_1 = require("./syntaxAnalysis/SimpleParser");
+const SimpleCalculator_1 = require("./syntaxCalculator/SimpleCalculator");
 const assignmentToken = new SimpleLexer_1.SimpleLexer('var 1$asd_1<=>===123;');
 const compareToken = new SimpleLexer_1.SimpleLexer('asdddd >= 123');
 const calculateToken = new SimpleLexer_1.SimpleLexer('2 + 3 * 5 / 3 * ( 4 + 6 );');
@@ -14,4 +15,6 @@ const calculateToken = new SimpleLexer_1.SimpleLexer('2 + 3 * 5 / 3 * ( 4 + 6 );
 const parser1 = new SimpleParser_1.SimpleParser('var a = 1 + (3 + 2) * 77 - 4;');
 const parser2 = new SimpleParser_1.SimpleParser('a = 1 + (3 + 2) * 77 - 4;');
 const parser3 = new SimpleParser_1.SimpleParser('1 + (3 + 2) * 77 - 4;');
-parser1.dumpAST();
+// parser1.dumpAST();
+const calculator1 = new SimpleCalculator_1.SimpleCalculator('1 + 3 * 3;');
+calculator1.evaluate();
