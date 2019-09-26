@@ -232,6 +232,10 @@ export class SimpleLexer implements ISimpleLexer {
     }
   }
 
+  public getTokenReader = () => {
+    return this.tokenReader;
+  }
+
   public getTokens = () => {
     return this.tokenList;
   }

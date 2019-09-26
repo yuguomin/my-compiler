@@ -241,6 +241,9 @@ class SimpleLexer {
                 console.log(token.getText() + "\t" + token.getType());
             }
         };
+        this.getTokenReader = () => {
+            return this.tokenReader;
+        };
         this.getTokens = () => {
             return this.tokenList;
         };

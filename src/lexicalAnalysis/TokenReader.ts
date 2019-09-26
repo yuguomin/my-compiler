@@ -15,4 +15,25 @@ export class TokenReader implements ITokenReader {
     }
     return null;
   }
+
+  public peek() {
+    if (this.pos < this.tokenList.length) {
+      return this.tokenList[this.pos];
+    }
+    return null;
+  }
+
+  public unRead() {
+    if (this.pos > 0) {
+      this.pos -= 1;
+    }
+  }
+
+  public getPosition() {
+    return this.pos;
+  }
+
+  public setPosition(pos: number) {
+    this.pos = pos;
+  }
 }
