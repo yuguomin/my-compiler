@@ -45,14 +45,13 @@ class SimpleParser {
         };
         this.variableDeclare = (tokenReader) => {
             let node = null;
-            let nodeText = '';
             let token = tokenReader.peek();
             if (token && token.getType() === TokenType_1.TokenType.VariableIdentifier) {
                 tokenReader.read();
                 token = tokenReader.peek();
                 if (token && token.getType() === TokenType_1.TokenType.Identifier) {
                     token = tokenReader.read();
-                    nodeText = token ? token.getText() : '';
+                    const nodeText = token ? token.getText() : null;
                     node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.VariableDeclare, nodeText);
                     token = tokenReader.peek();
                     if (token && token.getType() === TokenType_1.TokenType.Assignment) {
@@ -135,7 +134,7 @@ class SimpleParser {
                     token = tokenReader.read();
                     const child2 = this.multiplicative(tokenReader);
                     if (child2) {
-                        const tokenText = token ? token.getText() : '';
+                        const tokenText = token ? token.getText() : null;
                         node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Additive, tokenText);
                         node.append2Child(child1);
                         node.append2Child(child2);
@@ -165,7 +164,7 @@ class SimpleParser {
                     token = tokenReader.read();
                     const child2 = this.primary(tokenReader);
                     if (child2) {
-                        const tokenText = token ? token.getText() : '';
+                        const tokenText = token ? token.getText() : null;
                         node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Multiplicative, tokenText);
                         node.append2Child(child1);
                         node.append2Child(child2);
