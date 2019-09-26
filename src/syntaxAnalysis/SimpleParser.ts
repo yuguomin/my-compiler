@@ -190,7 +190,6 @@ export class SimpleParser implements ISimpleParser {
   /**
    * @description Analysis of primary expression
    * primary -> number | Id | (additive)
-   * var a = 1 + (3 + 2) * 77 - 4;
    */
   private primary: (tokenReader: ITokenReader) => IASTNode | null = (tokenReader) => {
     let node: IASTNode | null = null;
