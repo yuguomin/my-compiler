@@ -9,5 +9,8 @@
     "test": "node ./dist/index",
     "dev": "tsc -w",
     "build": "rm -rf ./dist && tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.6"
   }
 }

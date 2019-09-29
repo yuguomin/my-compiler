@@ -24,7 +24,7 @@ const calculateToken = new SimpleLexer('2 + 3 * 5 / 3 * ( 4 + 6 );');
 
 const parser1 = new SimpleParser('var a = 1 + (3 + 2) * 77 - 4;');
 const parser2 = new SimpleParser('a = 1 + (3 + 2) * 77 - 4;');
-const parser3 = new SimpleParser('1 + (3 + 2) * 77 - 4;');
+const parser3 = new SimpleParser('1 + (a + 2) * 77 - 4;a=1;');
 
 // parser1.dumpAST();
 // parser2.dumpAST();

@@ -23,7 +23,7 @@ const parser2 = new SimpleParser_1.SimpleParser('a = 1 + (3 + 2) * 77 - 4;');
 const parser3 = new SimpleParser_1.SimpleParser('1 + (a + 2) * 77 - 4;a=1;');
 // parser1.dumpAST();
 // parser2.dumpAST();
-// parser3.dumpAST();
+parser3.dumpAST();
 /**
  * @description use syntax parse get expression calculator
  */
@@ -34,4 +34,4 @@ const calculator4 = new SimpleCalculator_1.SimpleCalculator('1 + 13 * (23 - 34) 
 // calculator1.evaluate();
 // calculator2.evaluate();
 // calculator3.evaluate();
-calculator4.evaluate();
+// calculator4.evaluate();

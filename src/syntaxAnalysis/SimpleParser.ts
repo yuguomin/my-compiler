@@ -33,7 +33,7 @@ export class SimpleParser implements ISimpleParser {
   private syntaxParse = () => {
     const node = new SimpleASTNode(ASTNodeType.Program, 'pwc');
     if (this.tokenReader) {
-      if (this.tokenReader.peek()) {
+      while (this.tokenReader.peek()) {
         // test every parse, no success will return null, test next 
         let childNode = this.variableDeclare(this.tokenReader);
 

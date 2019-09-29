@@ -1,0 +1,23 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var TokenType;
+(function (TokenType) {
+    TokenType["Identifier"] = "Identifier";
+    TokenType["VariableIdentifier"] = "VariableIdentifier";
+    TokenType["NumberLiteral"] = "NumberLiteral";
+    TokenType["StringLiteral"] = "StringLiteral";
+    TokenType["Assignment"] = "Assignment";
+    TokenType["GE"] = "GreaterThanOrEqual";
+    TokenType["GT"] = "GreaterThan";
+    TokenType["LT"] = "LessThan";
+    TokenType["LE"] = "LessThanOrEqual";
+    TokenType["NSC"] = "NonstrictComparison";
+    TokenType["SC"] = "StrictComparison";
+    TokenType["Plus"] = "Plus";
+    TokenType["Minus"] = "Minus";
+    TokenType["Star"] = "Star";
+    TokenType["Slash"] = "Slash";
+    TokenType["Semicolon"] = "Semicolon";
+    TokenType["LeftParen"] = "LeftParen";
+    TokenType["RightParen"] = "RightParen";
+})(TokenType = exports.TokenType || (exports.TokenType = {}));

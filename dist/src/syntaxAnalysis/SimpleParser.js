@@ -24,7 +24,7 @@ class SimpleParser {
         this.syntaxParse = () => {
             const node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Program, 'pwc');
             if (this.tokenReader) {
-                while (this.tokenReader.peek()) {
+                if (this.tokenReader.peek()) {
                     // test every parse, no success will return null, test next 
                     let childNode = this.variableDeclare(this.tokenReader);
                     if (childNode === null) {
