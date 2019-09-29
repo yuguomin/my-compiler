@@ -1,0 +1,1 @@
+export const VERBOSE_STATUS_ARGV = '-v';

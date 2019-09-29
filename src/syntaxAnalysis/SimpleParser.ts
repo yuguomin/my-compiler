@@ -109,7 +109,7 @@ export class SimpleParser implements ISimpleParser {
     let token = tokenReader.peek();
     if (token && token.getType() === TokenType.Identifier) {
       tokenReader.read();
-      node = new SimpleASTNode(ASTNodeType.Identifier, token.getText());
+      node = new SimpleASTNode(ASTNodeType.AssignmentStmt, token.getText());
       token = tokenReader.peek();
       if (token && token.getType() === TokenType.Assignment) {
         tokenReader.read();

@@ -1,16 +1,22 @@
 import { ISimpleScript } from './interface/ISimpleScript';
-import readline from 'readline';
 import { EXIT_REPL_TOKEN, REPL_END_TOKEN } from './constant/InputToken';
 import { SimpleParser } from '../syntaxAnalysis/SimpleParser';
+import { IASTNode } from '../syntaxAnalysis/interface/IAstNode';
+import { VERBOSE_STATUS_ARGV } from './constant/ProcessArgv';
+import readline from 'readline';
+import { ASTNodeType } from '../syntaxAnalysis/enum/ASTNodeType';
+import { SPECIAL_TOKEN } from 'src/common/constant/SpecialToken';
 
 export class SimpleScript implements ISimpleScript {
   constructor() {
+    this.isVerbose = process.argv.slice(2)[0] === VERBOSE_STATUS_ARGV;
     this.initREPL();
     this.startREPL();
   }
 
   private REPL: readline.Interface;
   private code: string = '';
+  private isVerbose: boolean = false;
 
   private initREPL = () => {
     this.REPL = readline.createInterface({
@@ -20,7 +26,8 @@ export class SimpleScript implements ISimpleScript {
   }
 
   public startREPL() {
-    console.log(`Let's test your script language~ \nplease input \n`);
+    if (this.isVerbose) { console.log('verbose mode'); }
+    console.log(`Let's test your script language~ Please input \n`);
     this.REPL.on('line', (input) => {
       if (input === EXIT_REPL_TOKEN) {
         this.closeREPL();
@@ -32,14 +39,62 @@ export class SimpleScript implements ISimpleScript {
     });
   }
 
+  public parseScript() {
+    const rootNode = new SimpleParser(this.code).getRootNode();
+    if (!rootNode) { 
+      console.log(`warning: Can't parse script.`);
+      return;
+    }
+    this.evaluate(rootNode);
+  }
+
+  public evaluate(node: IASTNode, indent: string = '') {
+    console.log('-v', this.isVerbose);
+    let result = 0;
+    let child1: IASTNode | null = null;
+    let child2: IASTNode | null = null;
+    let value1: number = 0;
+    let value2: number = 0;
+    if (this.isVerbose) { console.log(indent + 'Calculating: ' + node.getType()); }
+    switch (node.getType()) {
+      case ASTNodeType.Program:
+        node.getChildren().forEach((child) => {
+          this.evaluate(child, indent + '\t');
+        });
+        break;
+      case ASTNodeType.Additive:
+        child1 = node.getChildren()[0];
+        value1 = this.evaluate(child1, indent + '\t');
+        child2 = node.getChildren()[1];
+        value1 = this.evaluate(child2, indent + '\t');
+        result = node.getText() === SPECIAL_TOKEN.PLUS ? 
+        value1 + value2 : value1 - value2;
+        break;
+      case ASTNodeType.Multiplicative:
+          child1 = node.getChildren()[0];
+          value1 = this.evaluate(child1, indent + '\t');
+          child2 = node.getChildren()[1];
+          value1 = this.evaluate(child2, indent + '\t');
+          result = node.getText() === SPECIAL_TOKEN.STAR ? 
+          value1 * value2 : value1 / value2;
+        break;
+      case ASTNodeType.Identifier:
+        // get Identifier value
+        break;
+      case ASTNodeType.NumberLiteral:
+        result = Number(node.getText());
+        break;
+      case ASTNodeType.VariableDeclare:
+        break;
+      case ASTNodeType.AssignmentStmt:
+        break;
+    }
+    return result;
+  }
+
   public closeREPL() {
     console.log('good bye~');
     this.REPL.close();
-  }
-
-  public parseScript() {
-    console.log('code', this.code);
-    new SimpleParser(this.code).dumpAST();
   }
 }
 

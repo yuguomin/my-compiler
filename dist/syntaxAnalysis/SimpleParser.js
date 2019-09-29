@@ -98,7 +98,7 @@ class SimpleParser {
             let token = tokenReader.peek();
             if (token && token.getType() === TokenType_1.TokenType.Identifier) {
                 tokenReader.read();
-                node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Identifier, token.getText());
+                node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.AssignmentStmt, token.getText());
                 token = tokenReader.peek();
                 if (token && token.getType() === TokenType_1.TokenType.Assignment) {
                     tokenReader.read();
