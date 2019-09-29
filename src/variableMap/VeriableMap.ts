@@ -1,16 +1,17 @@
 import { IVeriableMap } from './interface/IVeriableMap';
 
 export class VeriableMap implements IVeriableMap {
-  private veriableMap: any = {};
+  private veriableMap: object = {};
 
   public push(name: string, value: number) {
     this.veriableMap[name] = value;
   }
 
   public get(name: string) {
-    if (this.veriableMap[name]) {
-      return this.veriableMap[name];
-    }
-    return null;
+    return this.veriableMap[name];
+  }
+
+  public containsKey(name: string) {
+    return this.veriableMap.hasOwnProperty(name);
   }
 }

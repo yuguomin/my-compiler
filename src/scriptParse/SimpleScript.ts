@@ -5,7 +5,8 @@ import { IASTNode } from '../syntaxAnalysis/interface/IAstNode';
 import { VERBOSE_STATUS_ARGV } from './constant/ProcessArgv';
 import readline from 'readline';
 import { ASTNodeType } from '../syntaxAnalysis/enum/ASTNodeType';
-import { SPECIAL_TOKEN } from 'src/common/constant/SpecialToken';
+import { SPECIAL_TOKEN } from '../common/constant/SpecialToken';
+import { VeriableMap } from '../variableMap/VeriableMap';
 
 export class SimpleScript implements ISimpleScript {
   constructor() {
@@ -17,6 +18,7 @@ export class SimpleScript implements ISimpleScript {
   private REPL: readline.Interface;
   private code: string = '';
   private isVerbose: boolean = false;
+  private veriableMap = new VeriableMap();
 
   private initREPL = () => {
     this.REPL = readline.createInterface({
@@ -41,7 +43,7 @@ export class SimpleScript implements ISimpleScript {
 
   public parseScript() {
     const rootNode = new SimpleParser(this.code).getRootNode();
-    if (!rootNode) { 
+    if (!rootNode) {
       console.log(`warning: Can't parse script.`);
       return;
     }
@@ -49,12 +51,13 @@ export class SimpleScript implements ISimpleScript {
   }
 
   public evaluate(node: IASTNode, indent: string = '') {
-    console.log('-v', this.isVerbose);
     let result = 0;
     let child1: IASTNode | null = null;
     let child2: IASTNode | null = null;
     let value1: number = 0;
     let value2: number = 0;
+    let veriableName: string = '';
+    let veriableValue: number | undefined;
     if (this.isVerbose) { console.log(indent + 'Calculating: ' + node.getType()); }
     switch (node.getType()) {
       case ASTNodeType.Program:
@@ -67,19 +70,26 @@ export class SimpleScript implements ISimpleScript {
         value1 = this.evaluate(child1, indent + '\t');
         child2 = node.getChildren()[1];
         value1 = this.evaluate(child2, indent + '\t');
-        result = node.getText() === SPECIAL_TOKEN.PLUS ? 
-        value1 + value2 : value1 - value2;
+        result = node.getText() === SPECIAL_TOKEN.PLUS ?
+          value1 + value2 : value1 - value2;
         break;
       case ASTNodeType.Multiplicative:
-          child1 = node.getChildren()[0];
-          value1 = this.evaluate(child1, indent + '\t');
-          child2 = node.getChildren()[1];
-          value1 = this.evaluate(child2, indent + '\t');
-          result = node.getText() === SPECIAL_TOKEN.STAR ? 
+        child1 = node.getChildren()[0];
+        value1 = this.evaluate(child1, indent + '\t');
+        child2 = node.getChildren()[1];
+        value1 = this.evaluate(child2, indent + '\t');
+        result = node.getText() === SPECIAL_TOKEN.STAR ?
           value1 * value2 : value1 / value2;
         break;
       case ASTNodeType.Identifier:
         // get Identifier value
+        veriableName = node.getText() || '';
+        if (this.veriableMap.containsKey(veriableName)) {
+          // TODO: this way will type change, if not number type, need dispose
+          result = Number(this.veriableMap.get(veriableName));
+        } else {
+          throw new Error(`unknown variable: ${veriableName}`);
+        }
         break;
       case ASTNodeType.NumberLiteral:
         result = Number(node.getText());

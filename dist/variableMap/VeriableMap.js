@@ -8,10 +8,10 @@ class VeriableMap {
         this.veriableMap[name] = value;
     }
     get(name) {
-        if (this.veriableMap[name]) {
-            return this.veriableMap[name];
-        }
-        return null;
+        return this.veriableMap[name];
+    }
+    containsKey(name) {
+        return this.veriableMap.hasOwnProperty(name);
     }
 }
 exports.VeriableMap = VeriableMap;

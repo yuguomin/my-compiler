@@ -8,11 +8,13 @@ const SimpleParser_1 = require("../syntaxAnalysis/SimpleParser");
 const ProcessArgv_1 = require("./constant/ProcessArgv");
 const readline_1 = __importDefault(require("readline"));
 const ASTNodeType_1 = require("../syntaxAnalysis/enum/ASTNodeType");
-const SpecialToken_1 = require("src/common/constant/SpecialToken");
+const SpecialToken_1 = require("../common/constant/SpecialToken");
+const VeriableMap_1 = require("../variableMap/VeriableMap");
 class SimpleScript {
     constructor() {
         this.code = '';
         this.isVerbose = false;
+        this.veriableMap = new VeriableMap_1.VeriableMap();
         this.initREPL = () => {
             this.REPL = readline_1.default.createInterface({
                 input: process.stdin,
@@ -47,12 +49,13 @@ class SimpleScript {
         this.evaluate(rootNode);
     }
     evaluate(node, indent = '') {
-        console.log('-v', this.isVerbose);
         let result = 0;
         let child1 = null;
         let child2 = null;
         let value1 = 0;
         let value2 = 0;
+        let veriableName = '';
+        let veriableValue;
         if (this.isVerbose) {
             console.log(indent + 'Calculating: ' + node.getType());
         }
@@ -80,6 +83,14 @@ class SimpleScript {
                 break;
             case ASTNodeType_1.ASTNodeType.Identifier:
                 // get Identifier value
+                veriableName = node.getText() || '';
+                if (this.veriableMap.containsKey(veriableName)) {
+                    // TODO: this way will type change, if not number type, need dispose
+                    result = Number(this.veriableMap.get(veriableName));
+                }
+                else {
+                    throw new Error(`unknown variable: ${veriableName}`);
+                }
                 break;
             case ASTNodeType_1.ASTNodeType.NumberLiteral:
                 result = Number(node.getText());
