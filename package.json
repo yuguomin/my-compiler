@@ -6,6 +6,7 @@
   "author": "ygm",
   "license": "MIT",
   "scripts": {
+    "start": "node ./dist/scriptParse/SimpleScript.js",
     "test": "node ./dist/index",
     "dev": "tsc -w",
     "build": "rm -rf ./dist && tsc"
