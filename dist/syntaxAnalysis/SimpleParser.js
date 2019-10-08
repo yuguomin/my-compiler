@@ -24,21 +24,26 @@ class SimpleParser {
         this.syntaxParse = () => {
             const node = new SimpleASTNode_1.SimpleASTNode(ASTNodeType_1.ASTNodeType.Program, 'pwc');
             if (this.tokenReader) {
-                while (this.tokenReader.peek()) {
-                    // test every parse, no success will return null, test next 
-                    let childNode = this.variableDeclare(this.tokenReader);
-                    if (childNode === null) {
-                        childNode = this.expressionStatement(this.tokenReader);
+                try {
+                    while (this.tokenReader.peek()) {
+                        // test every parse, no success will return null, test next 
+                        let childNode = this.variableDeclare(this.tokenReader);
+                        if (childNode === null) {
+                            childNode = this.expressionStatement(this.tokenReader);
+                        }
+                        if (childNode === null) {
+                            childNode = this.assignmentStatement(this.tokenReader);
+                        }
+                        if (childNode) {
+                            node.append2Child(childNode);
+                        }
+                        else {
+                            throw new Error('unknown statement');
+                        }
                     }
-                    if (childNode === null) {
-                        childNode = this.assignmentStatement(this.tokenReader);
-                    }
-                    if (childNode) {
-                        node.append2Child(childNode);
-                    }
-                    else {
-                        throw new Error('unknown statement');
-                    }
+                }
+                catch (err) {
+                    console.log(err.message);
                 }
             }
             return node;

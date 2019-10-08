@@ -29,10 +29,11 @@ export class SimpleScript implements ISimpleScript {
 
   public startREPL() {
     if (this.isVerbose) { console.log('verbose mode'); }
-    console.log(`Let's test your script language~ Please input \n`);
+    process.stdout.write(`Let's test your script language~ Please input \n\n>`);
     this.REPL.on('line', (input) => {
       if (input === EXIT_REPL_TOKEN) {
         this.closeREPL();
+        return;
       }
       this.code += input + '\n';
       if (input[input.length - 1] === REPL_END_TOKEN) {
@@ -53,6 +54,7 @@ export class SimpleScript implements ISimpleScript {
       console.log(err.message);
     }
     this.code = '';
+    process.stdout.write('\r>');
   }
 
   public evaluate(node: IASTNode, indent: string = '') {
@@ -108,7 +110,7 @@ export class SimpleScript implements ISimpleScript {
         veriableName = node.getText() || '';
         if (node.getChildren().length > 0) {
           const child = node.getChildren()[0];
-          result = this.evaluate(child, indent + "\t");
+          result = this.evaluate(child, indent + '\t');
           veriableValue = result;
         }
         this.veriableMap.push(veriableName, veriableValue);
@@ -116,8 +118,12 @@ export class SimpleScript implements ISimpleScript {
     }
     if (this.isVerbose) {
       console.log(indent + 'Result: ' + result);
-    } else {
-      console.log('result', result);
+    } else if (['', '' + '\t'].includes(indent)) {
+      if (node.getType() === ASTNodeType.VariableDeclare || node.getType() === ASTNodeType.AssignmentStmt) {
+        console.log(node.getText() + ': ' + result);
+      } else if (node.getType() !== ASTNodeType.Program){
+        console.log(result);
+      }
     }
     return result;
   }
