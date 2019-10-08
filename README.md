@@ -7,7 +7,19 @@ need global devDependencies
 [`TypeScript`](https://ts.xcatliu.com/introduction/get-typescript)
 [`yarn`](https://yarn.bootcss.com/docs/install/#mac-stable)
 
+install packages
+```shell
+yarn install
+```
+
 ## command
+
+### start
+```shell
+yarn start
+```
+this command will open a script parsing environment.
+If you want to see the details, input `yarn start -v`
 
 ### test
 ```shell

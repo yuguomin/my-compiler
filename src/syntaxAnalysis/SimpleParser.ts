@@ -32,24 +32,28 @@ export class SimpleParser implements ISimpleParser {
 
   private syntaxParse = () => {
     const node = new SimpleASTNode(ASTNodeType.Program, 'pwc');
-    while (this.tokenReader) {
-      if (this.tokenReader.peek()) {
-        // test every parse, no success will return null, test next 
-        let childNode = this.variableDeclare(this.tokenReader);
-
-        if (childNode === null) {
-          childNode = this.expressionStatement(this.tokenReader);
+    if (this.tokenReader) {
+      try {
+        while (this.tokenReader.peek()) {
+          // test every parse, no success will return null, test next 
+          let childNode = this.variableDeclare(this.tokenReader);
+  
+          if (childNode === null) {
+            childNode = this.expressionStatement(this.tokenReader);
+          }
+  
+          if (childNode === null) {
+            childNode = this.assignmentStatement(this.tokenReader);
+          }
+  
+          if (childNode) {
+            node.append2Child(childNode);
+          } else {
+            throw new Error('unknown statement');
+          }
         }
-
-        if (childNode === null) {
-          childNode = this.assignmentStatement(this.tokenReader);
-        }
-
-        if (childNode) {
-          node.append2Child(childNode);
-        } else {
-          throw new Error('unknown statement');
-        }
+      } catch (err) {
+        console.log(err.message);
       }
     }
     return node;
@@ -109,7 +113,7 @@ export class SimpleParser implements ISimpleParser {
     let token = tokenReader.peek();
     if (token && token.getType() === TokenType.Identifier) {
       tokenReader.read();
-      node = new SimpleASTNode(ASTNodeType.Identifier, token.getText());
+      node = new SimpleASTNode(ASTNodeType.AssignmentStmt, token.getText());
       token = tokenReader.peek();
       if (token && token.getType() === TokenType.Assignment) {
         tokenReader.read();
