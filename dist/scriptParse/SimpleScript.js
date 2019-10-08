@@ -21,6 +21,12 @@ class SimpleScript {
                 output: process.stdout
             });
         };
+        this.getRealValue = (value) => {
+            if (value === null) {
+                return null;
+            }
+            return Number(value);
+        };
         this.isVerbose = process.argv.slice(2)[0] === ProcessArgv_1.VERBOSE_STATUS_ARGV;
         this.initREPL();
         this.startREPL();
@@ -47,29 +53,30 @@ class SimpleScript {
             return;
         }
         this.evaluate(rootNode);
+        this.code = '';
     }
     evaluate(node, indent = '') {
-        let result = 0;
+        let result = null;
         let child1 = null;
         let child2 = null;
         let value1 = 0;
         let value2 = 0;
         let veriableName = '';
-        let veriableValue;
+        let veriableValue = null;
         if (this.isVerbose) {
             console.log(indent + 'Calculating: ' + node.getType());
         }
         switch (node.getType()) {
             case ASTNodeType_1.ASTNodeType.Program:
                 node.getChildren().forEach((child) => {
-                    this.evaluate(child, indent + '\t');
+                    result = this.evaluate(child, indent + '\t');
                 });
                 break;
             case ASTNodeType_1.ASTNodeType.Additive:
                 child1 = node.getChildren()[0];
                 value1 = this.evaluate(child1, indent + '\t');
                 child2 = node.getChildren()[1];
-                value1 = this.evaluate(child2, indent + '\t');
+                value2 = this.evaluate(child2, indent + '\t');
                 result = node.getText() === SpecialToken_1.SPECIAL_TOKEN.PLUS ?
                     value1 + value2 : value1 - value2;
                 break;
@@ -77,7 +84,7 @@ class SimpleScript {
                 child1 = node.getChildren()[0];
                 value1 = this.evaluate(child1, indent + '\t');
                 child2 = node.getChildren()[1];
-                value1 = this.evaluate(child2, indent + '\t');
+                value2 = this.evaluate(child2, indent + '\t');
                 result = node.getText() === SpecialToken_1.SPECIAL_TOKEN.STAR ?
                     value1 * value2 : value1 / value2;
                 break;
@@ -86,19 +93,36 @@ class SimpleScript {
                 veriableName = node.getText() || '';
                 if (this.veriableMap.containsKey(veriableName)) {
                     // TODO: this way will type change, if not number type, need dispose
-                    result = Number(this.veriableMap.get(veriableName));
+                    console.log('this.veriableMap.get(veriableName)', this.veriableMap.get(veriableName));
+                    result = this.getRealValue(this.veriableMap.get(veriableName));
                 }
                 else {
                     throw new Error(`unknown variable: ${veriableName}`);
                 }
                 break;
             case ASTNodeType_1.ASTNodeType.NumberLiteral:
-                result = Number(node.getText());
-                break;
-            case ASTNodeType_1.ASTNodeType.VariableDeclare:
+                result = this.getRealValue(node.getText());
                 break;
             case ASTNodeType_1.ASTNodeType.AssignmentStmt:
+                veriableName = node.getText() || '';
+                if (!this.veriableMap.containsKey(veriableName)) {
+                    throw new Error(`unknown variable: ${veriableName}`);
+                }
+            case ASTNodeType_1.ASTNodeType.VariableDeclare:
+                veriableName = node.getText() || '';
+                if (node.getChildren().length > 0) {
+                    const child = node.getChildren()[0];
+                    result = this.evaluate(child, indent + "\t");
+                    veriableValue = result;
+                }
+                this.veriableMap.push(veriableName, veriableValue);
                 break;
+        }
+        if (this.isVerbose) {
+            console.log(indent + 'Result: ' + result);
+        }
+        else {
+            console.log('result', result);
         }
         return result;
     }

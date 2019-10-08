@@ -3,7 +3,7 @@ import { IVeriableMap } from './interface/IVeriableMap';
 export class VeriableMap implements IVeriableMap {
   private veriableMap: object = {};
 
-  public push(name: string, value: number) {
+  public push(name: string, value: number | null) {
     this.veriableMap[name] = value;
   }
 
