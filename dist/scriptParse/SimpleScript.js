@@ -52,7 +52,12 @@ class SimpleScript {
             console.log(`warning: Can't parse script.`);
             return;
         }
-        this.evaluate(rootNode);
+        try {
+            this.evaluate(rootNode);
+        }
+        catch (err) {
+            console.log(err.message);
+        }
         this.code = '';
     }
     evaluate(node, indent = '') {
@@ -93,7 +98,6 @@ class SimpleScript {
                 veriableName = node.getText() || '';
                 if (this.veriableMap.containsKey(veriableName)) {
                     // TODO: this way will type change, if not number type, need dispose
-                    console.log('this.veriableMap.get(veriableName)', this.veriableMap.get(veriableName));
                     result = this.getRealValue(this.veriableMap.get(veriableName));
                 }
                 else {
