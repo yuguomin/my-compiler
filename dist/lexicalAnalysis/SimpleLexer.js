@@ -25,105 +25,105 @@ class SimpleLexer {
          */
         this.tokenize = (code) => {
             this.code = code;
-            let readCharIndex = 0;
-            let char = '';
+            let readChIndex = 0;
+            let ch = '';
             let state = DfaState_1.DfaState.Initial;
             try {
-                while ((char = code[readCharIndex++]) !== undefined) {
+                while ((ch = code[readChIndex++]) !== undefined) {
                     switch (state) {
                         case DfaState_1.DfaState.Initial:
-                            state = this.initToken(char);
+                            state = this.initToken(ch);
                             break;
                         case DfaState_1.DfaState.Id:
-                            if (isVariableFollow_1.isVariableFollow(char)) {
-                                this.append2TokenText(char);
+                            if (isVariableFollow_1.isVariableFollow(ch)) {
+                                this.append2TokenText(ch);
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.Id_variable1:
-                            if (char === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_SECOND) {
+                            if (ch === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_SECOND) {
                                 state = DfaState_1.DfaState.Id_variable2;
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                             }
-                            else if (stringVerify_1.isAlpha(char) || stringVerify_1.isDigit(char)) {
+                            else if (stringVerify_1.isAlpha(ch) || stringVerify_1.isDigit(ch)) {
                                 state = DfaState_1.DfaState.Id;
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.Id_variable2:
-                            if (char === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_END) {
+                            if (ch === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_END) {
                                 state = DfaState_1.DfaState.Id_variable3;
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                             }
-                            else if (stringVerify_1.isAlpha(char) || stringVerify_1.isDigit(char)) {
+                            else if (stringVerify_1.isAlpha(ch) || stringVerify_1.isDigit(ch)) {
                                 state = DfaState_1.DfaState.Id;
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.Id_variable3:
-                            if (stringVerify_1.isBlank(char)) {
+                            if (stringVerify_1.isBlank(ch)) {
                                 this.changeTokenType(TokenType_1.TokenType.VariableIdentifier);
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             else {
                                 state = DfaState_1.DfaState.Id;
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                             }
                             break;
                         case DfaState_1.DfaState.NumberLiteral:
-                            if (stringVerify_1.isDigit(char)) {
-                                this.append2TokenText(char);
+                            if (stringVerify_1.isDigit(ch)) {
+                                this.append2TokenText(ch);
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.GT:
-                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (ch === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.GE);
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                                 state = DfaState_1.DfaState.GE;
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.LT:
-                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (ch === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.LE);
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                                 state = DfaState_1.DfaState.LE;
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.Assignment:
-                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (ch === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.NSC);
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                                 state = DfaState_1.DfaState.NSC;
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.NSC:
-                            if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
+                            if (ch === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                                 this.changeTokenType(TokenType_1.TokenType.SC);
-                                this.append2TokenText(char);
+                                this.append2TokenText(ch);
                                 state = DfaState_1.DfaState.SC;
                             }
                             else {
-                                state = this.initToken(char);
+                                state = this.initToken(ch);
                             }
                             break;
                         case DfaState_1.DfaState.SC:
@@ -136,12 +136,12 @@ class SimpleLexer {
                         case DfaState_1.DfaState.Semicolon:
                         case DfaState_1.DfaState.LeftParen:
                         case DfaState_1.DfaState.RightParen:
-                            state = this.initToken(char);
+                            state = this.initToken(ch);
                             break;
                     }
                 }
                 if (this.tokenText) {
-                    this.initToken(char);
+                    this.initToken(ch);
                 }
             }
             catch (err) {
@@ -151,10 +151,10 @@ class SimpleLexer {
         };
         /**
          * @description
-         * init token and judge current char state to parse machine
-         * Rules: if has token, need append to list first, and init token and text, then jurdge char state.
+         * init token and judge current ch state to parse machine
+         * Rules: if has token, need append to list first, and init token and text, then jurdge ch state.
          */
-        this.initToken = (char) => {
+        this.initToken = (ch) => {
             // init token
             if (this.tokenText.length) {
                 this.token.text = this.tokenText;
@@ -162,74 +162,74 @@ class SimpleLexer {
                 this.token = new SimpleToken_1.SimpleToken();
                 this.tokenText = '';
             }
-            return this.getInitCharState(char);
+            return this.getInitChState(ch);
         };
-        this.getInitCharState = (char) => {
+        this.getInitChState = (ch) => {
             let newState = DfaState_1.DfaState.Initial;
-            if (isVariableStart_1.isVariableStart(char)) {
-                newState = char === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_BEGIN ? DfaState_1.DfaState.Id_variable1 : DfaState_1.DfaState.Id;
+            if (isVariableStart_1.isVariableStart(ch)) {
+                newState = ch === SpecialToken_1.SPECIAL_TOKEN.VARIABLE_ID_BEGIN ? DfaState_1.DfaState.Id_variable1 : DfaState_1.DfaState.Id;
                 this.changeTokenType(TokenType_1.TokenType.Identifier);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (stringVerify_1.isDigit(char)) {
+            else if (stringVerify_1.isDigit(ch)) {
                 newState = DfaState_1.DfaState.NumberLiteral;
                 this.changeTokenType(TokenType_1.TokenType.NumberLiteral);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.ASSIGNMENT) {
                 newState = DfaState_1.DfaState.Assignment;
                 this.changeTokenType(TokenType_1.TokenType.Assignment);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.GREATER_THAN) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.GREATER_THAN) {
                 newState = DfaState_1.DfaState.GT;
                 this.changeTokenType(TokenType_1.TokenType.GT);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.LESS_THAN) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.LESS_THAN) {
                 newState = DfaState_1.DfaState.LT;
                 this.changeTokenType(TokenType_1.TokenType.LT);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.PLUS) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.PLUS) {
                 newState = DfaState_1.DfaState.Plus;
                 this.changeTokenType(TokenType_1.TokenType.Plus);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.MINUS) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.MINUS) {
                 newState = DfaState_1.DfaState.Minus;
                 this.changeTokenType(TokenType_1.TokenType.Minus);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.STAR) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.STAR) {
                 newState = DfaState_1.DfaState.Star;
                 this.changeTokenType(TokenType_1.TokenType.Star);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.SLASH) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.SLASH) {
                 newState = DfaState_1.DfaState.Slash;
                 this.changeTokenType(TokenType_1.TokenType.Slash);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.SEMICOLIN) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.SEMICOLIN) {
                 newState = DfaState_1.DfaState.Semicolon;
                 this.changeTokenType(TokenType_1.TokenType.Semicolon);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.LEFT_PAREN) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.LEFT_PAREN) {
                 newState = DfaState_1.DfaState.LeftParen;
                 this.changeTokenType(TokenType_1.TokenType.LeftParen);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
-            else if (char === SpecialToken_1.SPECIAL_TOKEN.RIGHT_PAREN) {
+            else if (ch === SpecialToken_1.SPECIAL_TOKEN.RIGHT_PAREN) {
                 newState = DfaState_1.DfaState.RightParen;
                 this.changeTokenType(TokenType_1.TokenType.RightParen);
-                this.append2TokenText(char);
+                this.append2TokenText(ch);
             }
             return newState;
         };
-        this.append2TokenText = (char) => {
-            this.tokenText = this.tokenText + char;
+        this.append2TokenText = (ch) => {
+            this.tokenText = this.tokenText + ch;
         };
         this.changeTokenType = (state) => {
             this.token.type = state;
