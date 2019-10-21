@@ -1,6 +1,6 @@
-import { isAlpha, isDigit } from "../../common/utils/stringVerify";
-import { SPECIAL_TOKEN } from "../../common/constant/SpecialToken";
+import { isAlpha, isDigit } from '../../common/utils/stringVerify';
+import { SPECIAL_TOKEN } from '../../common/constant/SpecialToken';
 
-export const isVariableFollow: (char: string) => boolean = (char) => {
-  return isAlpha(char) || isDigit(char) || [SPECIAL_TOKEN.DOLLAR_SIGN, SPECIAL_TOKEN.UNDER_LINE].includes(char);
+export const isVariableFollow: (ch: string) => boolean = (ch) => {
+  return isAlpha(ch) || isDigit(ch) || [SPECIAL_TOKEN.DOLLAR_SIGN, SPECIAL_TOKEN.UNDER_LINE].includes(ch);
 }

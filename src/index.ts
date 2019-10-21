@@ -42,4 +42,4 @@ const calculator4 = new SimpleCalculator('1 + 13 * (23 - 34) / 12 + 21;');
 // calculator1.evaluate();
 // calculator2.evaluate();
 // calculator3.evaluate();
-calculator4.evaluate();
+// calculator4.evaluate();

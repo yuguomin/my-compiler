@@ -69,7 +69,7 @@ class SimpleLexer {
                             }
                             break;
                         case DfaState_1.DfaState.Id_variable3:
-                            if (stringVerify_1.isBlank(ch)) {
+                            if (stringVerify_1.isBlank(ch)) { // TODO: '%' '*' will be error, judge not variable will be ok
                                 this.changeTokenType(TokenType_1.TokenType.VariableIdentifier);
                                 state = this.initToken(ch);
                             }
